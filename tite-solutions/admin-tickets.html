@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tickets | Admin | T.I.T.E Solutions</title>
+    
+    <link rel="stylesheet" href="css/stylesheet.css">
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .admin-dashboard {
+            display: flex;
+            min-height: 100vh;
+            background: #f8f9fa;
+        }
+        
+        .admin-sidebar {
+            width: 250px;
+            background: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .admin-logo {
+            text-align: center;
+            padding: 0 1rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 2rem;
+        }
+        
+        .admin-logo h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .admin-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .admin-sidebar nav {
+            flex: 1;
+            display: flex;
+        }
+        
+        .admin-nav li.nav-bottom {
+            margin-top: auto;
+        }
+        
+        .admin-nav li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .admin-nav a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .admin-nav a:hover,
+        .admin-nav a.active {
+            background: rgba(255,255,255,0.1);
+            border-left-color: white;
+        }
+        
+        .admin-nav i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        .admin-main {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+        
+        .admin-header {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .admin-header h1 {
+            margin: 0;
+            color: var(--secondary-color);
+            font-size: 1.75rem;
+        }
+        
+        .admin-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .admin-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+        
+        .admin-tab {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-light);
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .admin-tab:hover {
+            background: #f3f4f6;
+        }
+        
+        .admin-tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary-color);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .ticket-card {
+            background: #f8f9fa;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .ticket-info h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--secondary-color);
+        }
+        
+        .ticket-info p {
+            margin: 0;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .ticket-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-confirmed {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .logout-btn {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logout-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .admin-sidebar-toggle {
+            display: none; position: fixed; top: 1rem; left: 1rem; z-index: 1100;
+            background: var(--primary-color); color: white; border: none;
+            width: 44px; height: 44px; border-radius: 8px; font-size: 1.25rem;
+            cursor: pointer; align-items: center; justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .admin-sidebar-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 1040;
+        }
+        .admin-sidebar-overlay.active { display: block; }
+        @media (max-width: 768px) {
+            .admin-sidebar-toggle { display: flex; }
+            .admin-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 1050;
+            }
+
+            .admin-sidebar.open {
+                transform: translateX(0);
+            }
+
+            .admin-main {
+                margin-left: 0;
+                padding: 1rem;
+                padding-top: 4rem;
+                overflow-x: hidden;
+            }
+
+            .admin-header {
+                padding: 1rem 1.25rem;
+                flex-wrap: wrap;
+                gap: 0.75rem;
+            }
+
+            .btn-group {
+                flex-wrap: wrap;
+            }
+
+            .btn {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.85rem;
+            }
+
+            .ticket-card {
+                grid-template-columns: 1fr;
+            }
+
+            .ticket-meta {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .admin-tabs {
+                flex-wrap: wrap;
+                gap: 0.25rem;
+            }
+
+            .admin-tab {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .data-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .modal-close:hover {
+            color: #374151;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-dashboard">
+        <button class="admin-sidebar-toggle" id="adminSidebarToggle" aria-label="Toggle sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="admin-sidebar-overlay" id="adminSidebarOverlay"></div>
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-logo">
+                <i class="fa-solid fa-screwdriver-wrench" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                <h2>T.I.T.E Admin</h2>
+            </div>
+            <nav>
+                <ul class="admin-nav">
+                    <li><a href="admin-dashboard.html" class="nav-link">
+                        <i class="fa-solid fa-chart-line"></i> Dashboard
+                    </a></li>
+                    <li><a href="admin-tickets.html" class="nav-link active">
+                        <i class="fa-solid fa-ticket"></i> Tickets
+                    </a></li>
+                    <li><a href="admin-services.html" class="nav-link">
+                        <i class="fa-solid fa-cogs"></i> Services
+                    </a></li>
+                    <li><a href="admin-technicians.html" class="nav-link">
+                        <i class="fa-solid fa-users"></i> Technicians
+                    </a></li>
+                    <li><a href="admin-availability.html" class="nav-link">
+                        <i class="fa-solid fa-calendar"></i> Availability
+                    </a></li>
+                    <li><a href="admin-users.html" class="nav-link">
+                        <i class="fa-solid fa-user"></i> Users
+                    </a></li>
+                    <li><a href="admin-messages.html" class="nav-link">
+                        <i class="fa-solid fa-envelope"></i> Messages
+                    </a></li>
+                    <li><a href="admin-settings.html" class="nav-link">
+                        <i class="fa-solid fa-cog"></i> Settings
+                    </a></li>
+                    <li class="nav-bottom"><a href="index.html" class="nav-link">
+                        <i class="fa-solid fa-arrow-left"></i> Back to Main Page
+                    </a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="admin-header">
+                <div>
+                    <h1>Ticket Management</h1>
+                    <p>Manage service tickets</p>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="openTicketModal()">
+                        <i class="fa-solid fa-plus"></i> Add Ticket
+                    </button>
+                    <button class="btn btn-outline" onclick="exportTickets()">
+                        <i class="fa-solid fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+
+            <div class="admin-content">
+                <div class="admin-tabs">
+                    <button class="admin-tab active" data-tab="all" onclick="showTicketTab('all', this)">All Tickets</button>
+                    <button class="admin-tab" data-tab="pending" onclick="showTicketTab('pending', this)">Pending</button>
+                    <button class="admin-tab" data-tab="confirmed" onclick="showTicketTab('confirmed', this)">Confirmed</button>
+                    <button class="admin-tab" data-tab="completed" onclick="showTicketTab('completed', this)">Completed</button>
+                </div>
+                
+                <div id="ticketsList">
+                    <p>Loading tickets...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Ticket Modal -->
+    <div id="ticketModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeTicketModal()">&times;</button>
+            <h2 id="ticketModalTitle">Add Ticket</h2>
+            <form id="ticketForm">
+                <input type="hidden" id="ticketId" value="">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ticketFirstName">First Name *</label>
+                        <input type="text" id="ticketFirstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ticketLastName">Last Name *</label>
+                        <input type="text" id="ticketLastName" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ticketEmail">Email *</label>
+                        <input type="email" id="ticketEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ticketPhone">Phone *</label>
+                        <input type="tel" id="ticketPhone" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="ticketService">Service *</label>
+                    <select id="ticketService" required>
+                        <option value="">Select a service</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ticketDate">Date *</label>
+                        <input type="date" id="ticketDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ticketTime">Time *</label>
+                        <select id="ticketTime" required>
+                            <option value="">Select a time</option>
+                            <option value="09:00 AM">9:00 AM</option>
+                            <option value="11:00 AM">11:00 AM</option>
+                            <option value="02:00 PM">2:00 PM</option>
+                            <option value="04:00 PM">4:00 PM</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="ticketTechnician">Assign Technician</label>
+                    <select id="ticketTechnician">
+                        <option value="">Unassigned</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ticketAddress">Address</label>
+                    <input type="text" id="ticketAddress">
+                </div>
+                <div class="form-group">
+                    <label for="ticketDescription">Description</label>
+                    <textarea id="ticketDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="ticketStatus">Status</label>
+                    <select id="ticketStatus">
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeTicketModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Ticket</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Assign Technician Modal -->
+    <div id="assignModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAssignModal()">&times;</button>
+            <h2>Assign Technician</h2>
+            <form id="assignForm">
+                <input type="hidden" id="assignTicketId" value="">
+                <div class="form-group">
+                    <label for="assignTechnicianSelect">Technician</label>
+                    <select id="assignTechnicianSelect" required>
+                        <option value="">Unassigned</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeAssignModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Assign</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/database.js?v=2"></script>
+    <script>
+        let currentTicketTab = 'all';
+        let tickets = [];
+        let technicians = [];
+        let services = [];
+
+        // Load services and technicians
+        async function loadDropdownData() {
+            try {
+                console.log('Loading services...');
+                const servicesResult = await db.services.getAll(true);
+                console.log('Services result:', servicesResult);
+                if (servicesResult.success) {
+                    services = servicesResult.data;
+                    console.log('Services loaded:', services);
+                    const serviceSelect = document.getElementById('ticketService');
+                    serviceSelect.innerHTML = '<option value="">Select a service</option>';
+                    services.forEach(service => {
+                        serviceSelect.innerHTML += `<option value="${service.name}">${service.name}</option>`;
+                    });
+                } else {
+                    console.error('Failed to load services:', servicesResult.error);
+                }
+
+                console.log('Loading technicians...');
+                const techResult = await db.technicians.getAll({ active: false });
+                console.log('Technicians result:', techResult);
+                if (techResult.success) {
+                    technicians = techResult.data;
+                    console.log('Technicians loaded:', technicians);
+                    const techSelect = document.getElementById('ticketTechnician');
+                    techSelect.innerHTML = '<option value="">Unassigned</option>';
+                    technicians.forEach(tech => {
+                        techSelect.innerHTML += `<option value="${tech.id}">${tech.name}</option>`;
+                    });
+
+                    const assignTechSelect = document.getElementById('assignTechnicianSelect');
+                    assignTechSelect.innerHTML = '<option value="">Unassigned</option>';
+                    technicians.forEach(tech => {
+                        assignTechSelect.innerHTML += `<option value="${tech.id}">${tech.name}</option>`;
+                    });
+                } else {
+                    console.error('Failed to load technicians:', techResult.error);
+                }
+            } catch (error) {
+                console.error('Error loading dropdown data:', error);
+            }
+        }
+
+        // Load tickets
+        async function loadTickets() {
+            const container = document.getElementById('ticketsList');
+            container.innerHTML = '<p>Loading tickets...</p>';
+            
+            try {
+                const allowedTabs = ['all', 'pending', 'confirmed', 'completed', 'cancelled'];
+                const safeTab = allowedTabs.includes((currentTicketTab || '').toLowerCase())
+                    ? currentTicketTab.toLowerCase()
+                    : 'all';
+                const result = await db.tickets.getAll(safeTab);
+                if (result.success) {
+                    tickets = result.data;
+                    renderTickets(result.data);
+                } else {
+                    throw new Error(result.error || 'Failed to load tickets');
+                }
+            } catch (error) {
+                container.innerHTML = `<p>Error loading tickets: ${error.message}</p>`;
+            }
+        }
+
+        // Render tickets
+        function renderTickets(tickets) {
+            const container = document.getElementById('ticketsList');
+            
+            if (tickets.length === 0) {
+                container.innerHTML = '<p>No tickets found.</p>';
+                return;
+            }
+            
+            container.innerHTML = tickets.map(ticket => {
+                const technician = technicians.find(t => t.id === ticket.assigned_technician_id);
+                return `
+                <div class="ticket-card">
+                    <div class="ticket-info">
+                        <h4>Ticket #${ticket.id} - ${ticket.service || 'N/A'}</h4>
+                        <p><strong>Customer:</strong> ${ticket.firstName || ''} ${ticket.lastName || ''}</p>
+                        <p><strong>Email:</strong> ${ticket.email || 'N/A'}</p>
+                        <p><strong>Phone:</strong> ${ticket.phone || 'N/A'}</p>
+                        <p><strong>Address:</strong> ${ticket.address || 'N/A'}</p>
+                        <p><strong>Date:</strong> ${ticket.date ? new Date(ticket.date).toLocaleDateString() : 'N/A'} at ${ticket.time || 'N/A'}</p>
+                        <p><strong>Assigned Technician:</strong> ${technician ? technician.name : 'Unassigned'}</p>
+                        ${ticket.description ? `<p style="margin-top: 0.5rem; color: #6b7280;"><strong>Description:</strong> ${ticket.description}</p>` : ''}
+                    </div>
+                    <div class="ticket-meta">
+                        <span class="status-badge status-${ticket.status}">${ticket.status}</span>
+                        <div class="btn-group">
+                            <button class="btn btn-sm" onclick="editTicket('${ticket.id}')">Edit</button>
+                            <button class="btn btn-sm btn-outline" onclick="openAssignModal('${ticket.id}')">Assign</button>
+                            ${ticket.status !== 'completed' ? `
+                                <button class="btn btn-sm btn-primary" onclick="updateTicketStatus('${ticket.id}', '${ticket.status === 'pending' ? 'confirmed' : 'completed'}')">
+                                    ${ticket.status === 'pending' ? 'Confirm' : 'Complete'}
+                                </button>
+                            ` : ''}
+                            <button class="btn btn-sm btn-danger" onclick="deleteTicket('${ticket.id}')">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        // Show ticket tab
+        function showTicketTab(tab, element) {
+            currentTicketTab = tab;
+
+            // Update tab styling
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            element.classList.add('active');
+
+            loadTickets();
+        }
+
+        // Open ticket modal
+        function openTicketModal(ticketId = null) {
+            const modal = document.getElementById('ticketModal');
+            const title = document.getElementById('ticketModalTitle');
+            const form = document.getElementById('ticketForm');
+
+            console.log('Opening modal for ticket ID:', ticketId);
+            console.log('Available tickets:', tickets);
+            console.log('Available technicians:', technicians);
+
+            if (ticketId) {
+                title.textContent = 'Edit Ticket';
+                const ticket = tickets.find(t => t.id === ticketId);
+                console.log('Found ticket:', ticket);
+                if (ticket) {
+                    document.getElementById('ticketId').value = ticket.id;
+                    // Parse first/last name from individual fields or combined customer field
+                    let firstName = ticket.firstName || '';
+                    let lastName = ticket.lastName || '';
+                    if (!firstName && !lastName && ticket.customer) {
+                        const parts = ticket.customer.split(' ');
+                        firstName = parts[0] || '';
+                        lastName = parts.slice(1).join(' ') || '';
+                    }
+                    document.getElementById('ticketFirstName').value = firstName;
+                    document.getElementById('ticketLastName').value = lastName;
+                    document.getElementById('ticketEmail').value = ticket.email || '';
+                    document.getElementById('ticketPhone').value = ticket.phone || '';
+                    document.getElementById('ticketService').value = ticket.service || '';
+                    document.getElementById('ticketDate').value = ticket.date || '';
+                    document.getElementById('ticketTime').value = ticket.time || '';
+                    document.getElementById('ticketTechnician').value = ticket.assigned_technician_id || '';
+                    document.getElementById('ticketAddress').value = ticket.address || '';
+                    document.getElementById('ticketDescription').value = ticket.description || '';
+                    document.getElementById('ticketStatus').value = ticket.status || 'pending';
+                    console.log('All fields populated');
+                } else {
+                    console.error('Ticket not found with ID:', ticketId);
+                }
+            } else {
+                title.textContent = 'Add Ticket';
+                form.reset();
+                document.getElementById('ticketId').value = '';
+                document.getElementById('ticketStatus').value = 'pending';
+            }
+
+            modal.style.display = 'block';
+        }
+
+        // Close ticket modal
+        function closeTicketModal() {
+            document.getElementById('ticketModal').style.display = 'none';
+        }
+
+        // Open assign modal
+        function openAssignModal(ticketId) {
+            const modal = document.getElementById('assignModal');
+            const ticket = tickets.find(t => String(t.id) === String(ticketId));
+            if (!ticket) {
+                console.error('Ticket not found:', ticketId);
+                return;
+            }
+            document.getElementById('assignTicketId').value = ticket.id;
+            document.getElementById('assignTechnicianSelect').value = ticket.assigned_technician_id || '';
+            modal.style.display = 'block';
+        }
+
+        // Close assign modal
+        function closeAssignModal() {
+            document.getElementById('assignModal').style.display = 'none';
+        }
+
+        // Handle assign form submission
+        async function handleAssignSubmit(e) {
+            e.preventDefault();
+            const ticketId = document.getElementById('assignTicketId').value;
+            const technicianId = document.getElementById('assignTechnicianSelect').value;
+
+            try {
+                const response = await fetch('api/tickets.php', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        id: ticketId,
+                        assigned_technician_id: technicianId ? parseInt(technicianId) : null
+                    })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('Technician assigned successfully!');
+                    closeAssignModal();
+                    loadTickets();
+                } else {
+                    throw new Error(result.error || 'Failed to assign technician');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Edit ticket
+        function editTicket(id) {
+            openTicketModal(id);
+        }
+
+        // Handle form submission
+        async function handleTicketSubmit(e) {
+            e.preventDefault();
+
+            const ticketId = document.getElementById('ticketId').value;
+            const formData = {
+                firstName: document.getElementById('ticketFirstName').value,
+                lastName: document.getElementById('ticketLastName').value,
+                email: document.getElementById('ticketEmail').value,
+                phone: document.getElementById('ticketPhone').value,
+                service: document.getElementById('ticketService').value,
+                date: document.getElementById('ticketDate').value,
+                time: document.getElementById('ticketTime').value,
+                address: document.getElementById('ticketAddress').value,
+                description: document.getElementById('ticketDescription').value,
+                status: document.getElementById('ticketStatus').value
+            };
+
+            const technicianId = document.getElementById('ticketTechnician').value;
+            if (technicianId) {
+                formData.assigned_technician_id = parseInt(technicianId);
+            }
+
+            try {
+                let result;
+                if (ticketId) {
+                    result = await db.tickets.update(ticketId, formData);
+                    if (result.success) {
+                        alert('Ticket updated successfully!');
+                    } else {
+                        throw new Error(result.error || 'Failed to update ticket');
+                    }
+                } else {
+                    result = await db.tickets.create(formData);
+                    if (result.success) {
+                        alert('Ticket created successfully!');
+                    } else {
+                        throw new Error(result.error || 'Failed to create ticket');
+                    }
+                }
+
+                closeTicketModal();
+                loadTickets();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Update ticket status
+        async function updateTicketStatus(id, status) {
+            try {
+                const result = await db.tickets.update(id, { status });
+                if (result.success) {
+                    alert('Ticket updated successfully!');
+                    loadTickets();
+                } else {
+                    throw new Error(result.error || 'Failed to update ticket');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Delete ticket
+        async function deleteTicket(id) {
+            if (!confirm('Are you sure you want to delete this ticket?')) return;
+            
+            try {
+                const result = await db.tickets.delete(id);
+                if (result.success) {
+                    alert('Ticket deleted successfully!');
+                    loadTickets();
+                } else {
+                    throw new Error(result.error || 'Failed to delete ticket');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Export tickets
+        function exportTickets() {
+            if (tickets.length === 0) {
+                alert('No tickets to export');
+                return;
+            }
+            
+            const csv = [
+                ['ID', 'Service', 'Customer', 'Email', 'Phone', 'Date', 'Time', 'Status', 'Description'].join(','),
+                ...tickets.map(t => [
+                    t.id,
+                    `"${t.service}"`,
+                    `"${t.first_name} ${t.last_name}"`,
+                    t.email,
+                    `"${t.phone || ''}"`,
+                    t.date,
+                    t.time,
+                    t.status,
+                    `"${t.description || ''}"`
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tickets-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Logout function
+        async function logout() {
+            try {
+                await db.auth.logout();
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check auth
+            try {
+                const result = await db.auth.checkSession();
+                if (!result.success || !db.auth.isAdmin()) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Load dropdown data and tickets
+            await loadDropdownData();
+            loadTickets();
+
+            // Add form submit listeners
+            document.getElementById('ticketForm').addEventListener('submit', handleTicketSubmit);
+            document.getElementById('assignForm').addEventListener('submit', handleAssignSubmit);
+        });
+
+        // Expose functions
+        window.showTicketTab = showTicketTab;
+        window.openTicketModal = openTicketModal;
+        window.closeTicketModal = closeTicketModal;
+        window.openAssignModal = openAssignModal;
+        window.closeAssignModal = closeAssignModal;
+        window.editTicket = editTicket;
+        window.updateTicketStatus = updateTicketStatus;
+        window.deleteTicket = deleteTicket;
+        window.exportTickets = exportTickets;
+        window.logout = logout;
+    </script>
+    <script>
+        // Sidebar toggle for mobile (admin pages)
+        (function() {
+            const sidebarToggle = document.getElementById('adminSidebarToggle');
+            const sidebarOverlay = document.getElementById('adminSidebarOverlay');
+            const sidebar = document.getElementById('adminSidebar');
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', () => {
+                    if (sidebar) sidebar.classList.toggle('open');
+                    if (sidebarOverlay) sidebarOverlay.classList.toggle('active');
+                });
+            }
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', () => {
+                    if (sidebar) sidebar.classList.remove('open');
+                    sidebarOverlay.classList.remove('active');
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

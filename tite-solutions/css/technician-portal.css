@@ -1,0 +1,54 @@
+.tech-layout { display: flex; min-height: 100vh; background: #f8f9fa; }
+.tech-sidebar { width: 250px; background: var(--primary-color); color: #fff; padding: 2rem 0; position: fixed; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; }
+.tech-logo { text-align: center; padding: 0 1rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.2); margin-bottom: 1.25rem; }
+.tech-profile { text-align: center; padding: 0.75rem 1rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.15); margin-bottom: 1.25rem; }
+.tech-avatar { width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.2); margin: 0 auto .5rem; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.tech-nav { list-style: none; margin: 0; padding: 0; flex: 1; display: flex; flex-direction: column; }
+.tech-nav li:last-child { margin-top: auto; }
+.tech-nav a { display: block; padding: 1rem 1.5rem; color: #fff; text-decoration: none; border-left: 3px solid transparent; transition: background .3s; }
+.tech-nav a:hover, .tech-nav a.active { background: rgba(255,255,255,0.1); border-left-color: #fff; }
+.tech-nav i { width: 20px; margin-right: 10px; }
+.tech-main { flex: 1; margin-left: 250px; padding: 2rem; }
+.tech-header { background: #fff; padding: 1.5rem 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,.1); margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; }
+.tech-panel { background: #fff; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,.1); margin-bottom: 1rem; }
+.tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.tech-stat { text-align: center; }
+.tech-stat h3 { margin: 0 0 .5rem; font-size: 2rem; color: var(--secondary-color); }
+.tech-stat p { margin: 0; color: var(--text-light); }
+.assignment-card { border: 1px solid #e9ecef; border-radius: 10px; padding: 1rem; margin-bottom: .75rem; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: .4rem; }
+.calendar-day { min-height: 42px; border: 1px solid #e9ecef; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+.calendar-day.has-assignments { background: #e3f2fd; border-color: var(--primary-color); }
+.slot-row { display: flex; gap: .5rem; align-items: center; padding: .5rem 0; border-bottom: 1px solid #f0f0f0; }
+
+/* Mobile sidebar toggle */
+.tech-sidebar-toggle {
+    display: none; position: fixed; top: 1rem; left: 1rem; z-index: 1100;
+    background: var(--primary-color); color: white; border: none;
+    width: 44px; height: 44px; border-radius: 8px; font-size: 1.25rem;
+    cursor: pointer; align-items: center; justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.tech-sidebar-overlay {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5); z-index: 1040;
+}
+.tech-sidebar-overlay.active { display: block; }
+
+@media (max-width: 768px) {
+    .tech-sidebar-toggle { display: flex; }
+    .tech-sidebar { transform: translateX(-100%); transition: transform 0.3s; z-index: 1050; }
+    .tech-sidebar.open { transform: translateX(0); }
+    .tech-main { margin-left: 0; padding: 1rem; padding-top: 4rem; overflow-x: hidden; }
+    .tech-header { padding: 1rem 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+    .tech-grid { grid-template-columns: 1fr; }
+    .assignment-card { padding: 0.75rem; font-size: 0.9rem; }
+    .calendar-grid { grid-template-columns: repeat(7, 1fr); gap: .2rem; }
+    .calendar-day { min-height: 32px; font-size: 0.75rem; }
+}
+
+@media (max-width: 480px) {
+    .tech-header h1 { font-size: 1.3rem; }
+    .tech-header p { font-size: 0.85rem; }
+    .tech-stat h3 { font-size: 1.5rem; }
+}

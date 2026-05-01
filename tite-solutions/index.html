@@ -1,0 +1,2091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Security headers (also set server-side) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https://images.unsplash.com data:; connect-src 'self';">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <link rel="stylesheet" href="css/stylesheet.css">
+    <title>TITE Solutions | Professional Tech Services</title>
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://images.unsplash.com">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="logo" aria-label="T.I.T.E Solutions Home">
+            <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i> 
+            <span>T.I.T.E</span>
+        </div>
+
+        <ul class="nav-links" id="navLinks" role="menubar">
+            <li role="none"><a href="#home" role="menuitem">Home</a></li>
+            <li role="none"><a href="#services" role="menuitem">Services</a></li>
+            <li role="none" id="navBookingLink"><a href="#booking" role="menuitem">Booking</a></li>
+            <li role="none" id="navTicketsLink"><a href="#tickets" role="menuitem">My Tickets</a></li>
+            <li role="none"><a href="#about" role="menuitem">About</a></li>
+            <li role="none"><a href="#contact" role="menuitem">Contact</a></li>
+            
+            <!-- Admin Button (hidden by default; shown only for admin users) -->
+            <li id="adminNav" style="display:none" role="none">
+                <a href="admin.html" class="btn-login" type="button">Admin Dashboard</a>
+            </li>
+            
+            <!-- Technician Button (hidden by default; shown only for technician users) -->
+            <li id="technicianNav" style="display:none" role="none">
+                <a href="technician-dashboard.html" class="btn-login" type="button">Technician Dashboard</a>
+            </li>
+
+            <!-- Guest View -->
+            <li id="guestNav" role="none">
+                <button class="btn-login" onclick="openModal('authModal')" type="button">Login / Sign Up</button>
+            </li>
+            
+            <!-- Logged In View -->
+            <li class="user-menu" id="userNav" role="none">
+                <a class="btn-book" href="#booking" role="button">Book Service</a>
+                <div class="user-avatar" onclick="toggleDropdown()" role="button" aria-haspopup="true" aria-expanded="false" aria-label="User menu" tabindex="0" onkeypress="if(event.key==='Enter')toggleDropdown()">
+                    <i class="fa-solid fa-user" aria-hidden="true"></i>
+                    <div class="dropdown-menu" id="userDropdown" role="menu" aria-label="User actions">
+                        <a href="#" onclick="openProfileModal(); return false;" role="menuitem">
+                            <i class="fa-solid fa-user" aria-hidden="true"></i> Profile
+                        </a>
+                        <a href="technician-dashboard.html" id="technicianPortalLink" style="display:none;" role="menuitem">
+                            <i class="fa-solid fa-wrench" aria-hidden="true"></i> Technician Portal
+                        </a>
+                        <hr role="separator">
+                        <a href="#" onclick="logout(); return false;" role="menuitem">
+                            <i class="fa-solid fa-sign-out-alt" aria-hidden="true"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navLinks">
+            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        </button>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home" role="banner" aria-label="Welcome to T.I.T.E Solutions">
+        <h1>Technology & Information Technology Experts</h1>
+        <p>Professional tech services at your fingertips. Book appointments, track tickets, and chat with our experts.</p>
+        <div class="hero-buttons">
+            <a href="#booking" id="heroBookBtn" class="btn btn-primary" role="button">Book Appointment</a>
+            <a href="#services" class="btn btn-outline" role="button">Our Services</a>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section id="services" aria-labelledby="services-heading">
+        <div class="section-title">
+            <h2 id="services-heading">Our Services</h2>
+            <div class="line" aria-hidden="true"></div>
+        </div>
+        <div class="services-grid" role="list">
+            <article class="service-card" onclick="selectService('Computer Repair')" role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')selectService('Computer Repair')" aria-label="Computer Repair service, starting at 500 pesos">
+                <i class="fa-solid fa-laptop service-icon" aria-hidden="true"></i>
+                <h3>Computer Repair</h3>
+                <p>Hardware troubleshooting, virus removal, and system optimization.</p>
+                <span class="price-tag">From ₱500</span>
+            </article>
+            
+            <article class="service-card" onclick="selectService('Network Setup')" role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')selectService('Network Setup')" aria-label="Network Setup service, starting at 800 pesos">
+                <i class="fa-solid fa-wifi service-icon" aria-hidden="true"></i>
+                <h3>Network Setup</h3>
+                <p>Router installation, WiFi configuration, and network security.</p>
+                <span class="price-tag">From ₱800</span>
+            </article>
+            
+            <article class="service-card" onclick="selectService('Hardware Upgrade')" role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')selectService('Hardware Upgrade')" aria-label="Hardware Upgrade service, starting at 700 pesos">
+                <i class="fa-solid fa-microchip service-icon" aria-hidden="true"></i>
+                <h3>Hardware Upgrade</h3>
+                <p>RAM, SSD, GPU upgrades and performance enhancements.</p>
+                <span class="price-tag">From ₱700</span>
+            </article>
+            
+            <article class="service-card" onclick="selectService('Data Recovery')" role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')selectService('Data Recovery')" aria-label="Data Recovery service, starting at 1200 pesos">
+                <i class="fa-solid fa-database service-icon" aria-hidden="true"></i>
+                <h3>Data Recovery</h3>
+                <p>Recover lost files from damaged drives and storage devices.</p>
+                <span class="price-tag">From ₱1,200</span>
+            </article>
+            
+            <article class="service-card" onclick="selectService('Software Installation')" role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')selectService('Software Installation')" aria-label="Software Installation service, starting at 400 pesos">
+                <i class="fa-solid fa-download service-icon" aria-hidden="true"></i>
+                <h3>Software Installation</h3>
+                <p>OS installation, driver updates, and software configuration.</p>
+                <span class="price-tag">From ₱400</span>
+            </article>
+            
+            <article class="service-card" onclick="selectService('Maintenance')" role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')selectService('Maintenance')" aria-label="Maintenance service, starting at 600 pesos">
+                <i class="fa-solid fa-tools service-icon" aria-hidden="true"></i>
+                <h3>Maintenance</h3>
+                <p>Regular cleaning, thermal paste replacement, and health checks.</p>
+                <span class="price-tag">From ₱600</span>
+            </article>
+        </div>
+    </section>
+
+    <!-- BOOKING SECTION -->
+    <section id="booking" aria-labelledby="booking-heading">
+        <div class="section-title">
+            <h2 id="booking-heading">Book Appointment</h2>
+            <div class="line" aria-hidden="true"></div>
+        </div>
+        
+        <!-- Login Required Message (shown when not logged in) -->
+        <div id="bookingLoginRequired" style="text-align: center; padding: 3rem; background: var(--white); border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);">
+            <i class="fa-solid fa-lock" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 1rem;" aria-hidden="true"></i>
+            <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">Login Required</h3>
+            <p style="color: var(--text-light); margin-bottom: 2rem; max-width: 400px; margin-left: auto; margin-right: auto;">Please login or create an account to book an appointment and manage your service tickets.</p>
+            <button class="btn btn-primary" onclick="openModal('authModal')" style="padding: 0.8rem 3rem;" type="button">Login / Sign Up</button>
+        </div>
+
+        <!-- Role Restricted Message (shown for admin/technician) -->
+        <div id="bookingRoleRestricted" style="display: none; text-align: center; padding: 3rem; background: var(--white); border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);">
+            <i class="fa-solid fa-user-shield" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 1rem;" aria-hidden="true"></i>
+            <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">Not Available</h3>
+            <p style="color: var(--text-light); margin-bottom: 2rem; max-width: 400px; margin-left: auto; margin-right: auto;">Booking and ticket management are not available for admin or technician accounts.</p>
+            <div style="display:flex; flex-wrap:wrap; gap:1rem; justify-content:center; margin-top:1rem;">
+            <a href="admin.html" id="adminRedirectBtn" class="btn btn-primary" style="padding: 0.8rem 3rem; display: none;" role="button">Admin Dashboard</a>
+            <a href="technician-dashboard.html" id="techRedirectBtn" class="btn btn-primary" style="padding: 0.8rem 3rem; display: none;" role="button">Technician Dashboard</a>
+            </div>
+        </div>
+
+        <!-- Booking Form (shown when logged in) -->
+        <div id="bookingFormContainer" style="display: none;">
+            <div class="booking-container">
+                <form class="booking-form" id="bookingForm" onsubmit="submitBooking(event)" aria-label="Booking form">
+                    <div class="alert alert-success" id="bookingSuccess" role="alert" aria-live="polite" style="display: none;">
+                        Booking submitted successfully! Check your tickets.
+                    </div>
+                    <div class="alert alert-error" id="bookingError" role="alert" aria-live="assertive" style="display: none;"></div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bookFirstName">First Name <span aria-label="required">*</span></label>
+                            <input type="text" id="bookFirstName" required autocomplete="given-name" maxlength="50">
+                        </div>
+                        <div class="form-group">
+                            <label for="bookLastName">Last Name <span aria-label="required">*</span></label>
+                            <input type="text" id="bookLastName" required autocomplete="family-name" maxlength="50">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bookEmail">Email <span aria-label="required">*</span></label>
+                        <input type="email" id="bookEmail" required autocomplete="email" maxlength="100">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bookPhone">Phone <span aria-label="required">*</span></label>
+                        <input type="tel" id="bookPhone" required autocomplete="tel" maxlength="20" pattern="[0-9\s\-\+\(\)]{7,20}" title="Please enter a valid phone number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bookAddress">Address</label>
+                        <input type="text" id="bookAddress" placeholder="Street No., Barangay, City, Zip" autocomplete="street-address" maxlength="200">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bookService">Service <span aria-label="required">*</span></label>
+                        <select id="bookService" required onchange="onServiceChange()">
+                            <option value="">Select a service</option>
+                        </select>
+                        <div id="serviceLoading" style="display: none; text-align: center; padding: 10px;">
+                            <i class="fa-solid fa-spinner fa-spin"></i> Loading services...
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bookDate">Date <span aria-label="required">*</span></label>
+                            <input type="date" id="bookDate" name="bookDate" required style="display: none;">
+                            <div id="calendarContainer" style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fafafa;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                    <button type="button" id="prevMonth" class="btn" style="padding: 5px 10px;">&lt;</button>
+                                    <h4 id="calendarMonth" style="margin: 0; color: var(--secondary-color);"></h4>
+                                    <button type="button" id="nextMonth" class="btn" style="padding: 5px 10px;">&gt;</button>
+                                </div>
+                                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; margin-bottom: 10px;">
+                                    <div style="font-weight: bold; color: var(--text-light);">Sun</div>
+                                    <div style="font-weight: bold; color: var(--text-light);">Mon</div>
+                                    <div style="font-weight: bold; color: var(--text-light);">Tue</div>
+                                    <div style="font-weight: bold; color: var(--text-light);">Wed</div>
+                                    <div style="font-weight: bold; color: var(--text-light);">Thu</div>
+                                    <div style="font-weight: bold; color: var(--text-light);">Fri</div>
+                                    <div style="font-weight: bold; color: var(--text-light);">Sat</div>
+                                </div>
+                                <div id="calendarDays" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;"></div>
+                                <div id="dateLoading" style="display: none; text-align: center; padding: 10px;">
+                                    <i class="fa-solid fa-spinner fa-spin"></i> Checking availability...
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Time Slot <span aria-label="required">*</span></label>
+                            <div class="time-slots" id="timeSlots" role="radiogroup" aria-label="Available time slots">
+                                <div class="time-slot" onclick="selectTime(this, '09:00 AM')" role="radio" aria-checked="false" tabindex="0" onkeypress="if(event.key==='Enter'||event.key===' ')selectTime(this, '09:00 AM')">09:00</div>
+                                <div class="time-slot" onclick="selectTime(this, '11:00 AM')" role="radio" aria-checked="false" tabindex="0" onkeypress="if(event.key==='Enter'||event.key===' ')selectTime(this, '11:00 AM')">11:00</div>
+                                <div class="time-slot" onclick="selectTime(this, '02:00 PM')" role="radio" aria-checked="false" tabindex="0" onkeypress="if(event.key==='Enter'||event.key===' ')selectTime(this, '02:00 PM')">02:00</div>
+                                <div class="time-slot" onclick="selectTime(this, '04:00 PM')" role="radio" aria-checked="false" tabindex="0" onkeypress="if(event.key==='Enter'||event.key===' ')selectTime(this, '04:00 PM')">04:00</div>
+                            </div>
+                            <input type="hidden" id="bookTime" required aria-hidden="true">
+                            <div id="timeSlotsLoading" style="display: none; text-align: center; padding: 10px;">
+                                <i class="fa-solid fa-spinner fa-spin"></i> Loading available times...
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="technicianGroup" style="display: none;">
+                        <label for="bookTechnician">Preferred Technician (Optional)</label>
+                        <select id="bookTechnician">
+                            <option value="">No preference</option>
+                        </select>
+                        <div id="technicianLoading" style="display: none; text-align: center; padding: 10px;">
+                            <i class="fa-solid fa-spinner fa-spin"></i> Loading technicians...
+                        </div>
+                        <div id="technicianInfo" style="margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 5px; display: none;">
+                            <small id="technicianDetails"></small>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bookDesc">Description</label>
+                        <textarea id="bookDesc" rows="3" placeholder="Describe your issue..." maxlength="1000"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;" id="submitBookingBtn">
+                        <span class="btn-text">Confirm Booking</span>
+                        <span class="btn-loading" style="display: none;"><i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Processing...</span>
+                    </button>
+                </form>
+                
+                <aside class="booking-summary" aria-label="Booking summary">
+                    <h3>Booking Summary</h3>
+                    <div class="summary-item">
+                        <span>Service</span>
+                        <span id="summaryService">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Date</span>
+                        <span id="summaryDate">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Time</span>
+                        <span id="summaryTime">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Estimated Price</span>
+                        <span id="summaryPrice">₱0</span>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- TICKET SYSTEM SECTION -->
+    <section id="tickets" aria-labelledby="tickets-heading">
+        <div class="section-title">
+            <h2 id="tickets-heading">My Tickets</h2>
+            <div class="line" aria-hidden="true"></div>
+        </div>
+        <div class="ticket-section">
+            <div class="ticket-tabs" role="tablist" aria-label="Ticket filters">
+                <button class="ticket-tab active" onclick="filterTickets('all')" role="tab" aria-selected="true" aria-controls="ticketList" id="tab-all">All Tickets</button>
+                <button class="ticket-tab" onclick="filterTickets('pending')" role="tab" aria-selected="false" aria-controls="ticketList" id="tab-pending">Pending</button>
+                <button class="ticket-tab" onclick="filterTickets('confirmed')" role="tab" aria-selected="false" aria-controls="ticketList" id="tab-confirmed">Confirmed</button>
+                <button class="ticket-tab" onclick="filterTickets('completed')" role="tab" aria-selected="false" aria-controls="ticketList" id="tab-completed">Completed</button>
+            </div>
+            <div class="ticket-list" id="ticketList" role="tabpanel" aria-labelledby="tab-all">
+                <!-- Tickets will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" aria-labelledby="about-heading">
+        <div class="section-title">
+            <h2 id="about-heading">About Us</h2>
+            <div class="line" aria-hidden="true"></div>
+        </div>
+        <div class="about-container">
+            <div class="about-text">
+                <h3>Technology & Information Technology Experts</h3>
+                <p>Your trusted technology partner. We provide professional repair services, network solutions, and IT support with transparent pricing and guaranteed satisfaction.</p>
+                
+                <div class="team-grid" role="list" aria-label="Our team">
+                    <article class="team-member" role="listitem">
+                        <div class="team-avatar">
+                            <img src="pics/cholo.jpg" alt="Cholo Maclang, Lead Technician" loading="lazy" width="100" height="100">
+                        </div>
+                        <h4>Cholo Maclang</h4>
+                        <p>Lead Technician</p>
+                    </article>
+                    <article class="team-member" role="listitem">
+                        <div class="team-avatar">
+                            <img src="pics/justine.jpg" alt="Justine Sambito, Hardware Specialist" loading="lazy" width="100" height="100">
+                        </div>
+                        <h4>Justine Sambito</h4>
+                        <p>Hardware Specialist</p>
+                    </article>
+                    <article class="team-member" role="listitem">
+                        <div class="team-avatar">
+                            <img src="pics/nj.jpg" alt="Noriel Jermaine Antonio, Network Engineer" loading="lazy" width="100" height="100">
+                        </div>
+                        <h4>Noriel Jermaine Antonio</h4>
+                        <p>Network Engineer</p>
+                    </article>
+                    <article class="team-member" role="listitem">
+                        <div class="team-avatar">
+                            <img src="pics/gerson.jpg" alt="Gerson Marchan, Network Engineer" loading="lazy" width="100" height="100">
+                        </div>
+                        <h4>Gerson Marchan</h4>
+                        <p>Network Engineer</p>
+                    </article>
+                    <article class="team-member" role="listitem">
+                        <div class="team-avatar">
+                            <img src="pics/roselle.jpg" alt="Roselle Anne Sotto, Manager" loading="lazy" width="100" height="100">
+                        </div>
+                        <h4>Roselle Anne Sotto</h4>
+                        <p>Manager</p>
+                    </article>
+                </div>
+            </div>
+            <div class="about-image" role="img" aria-label="T.I.T.E Solutions team at work"></div>
+        </div>
+    </section>    <!-- CONTACT SECTION -->
+    <section id="contact" aria-labelledby="contact-heading">
+        <div class="section-title">
+            <h2 id="contact-heading">Contact Us</h2>
+            <div class="line" aria-hidden="true"></div>
+        </div>
+        <div class="contact-container">
+            <form class="contact-form" onsubmit="submitContact(event)" aria-label="Contact form">
+                <div class="alert alert-success" id="contactSuccess" role="alert" aria-live="polite" style="display: none;">
+                    Message sent successfully! We'll get back to you soon.
+                </div>
+                <div class="alert alert-error" id="contactError" role="alert" aria-live="assertive" style="display: none;"></div>
+                
+                <div class="form-group">
+                    <label for="contactName">Name <span aria-label="required">*</span></label>
+                    <input type="text" id="contactName" required maxlength="100" autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label for="contactEmail">Email <span aria-label="required">*</span></label>
+                    <input type="email" id="contactEmail" required maxlength="100" autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="contactMessage">Message <span aria-label="required">*</span></label>
+                    <textarea id="contactMessage" rows="4" required minlength="10" maxlength="5000" placeholder="How can we help you?"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" id="submitContactBtn">
+                    <span class="btn-text">Send Message</span>
+                    <span class="btn-loading" style="display: none;"><i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Sending...</span>
+                </button>
+            </form>
+            <div class="map-container" aria-label="Location map">
+                <iframe src="https://maps.google.com/maps?q=Bulacan&t=&z=13&ie=UTF8&iwloc=&output=embed" 
+                        title="T.I.T.E Solutions location in Bulacan" 
+                        loading="lazy"
+                        sandbox="allow-scripts allow-same-origin">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHAT WIDGET -->
+    <div class="chat-widget" aria-label="Live chat">
+        <div class="chat-window" id="chatWindow" role="dialog" aria-label="Chat with T.I.T.E Support" aria-hidden="true" style="display: none;">
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <div class="staff-avatar" aria-hidden="true">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600;">T.I.T.E Support</div>
+                        <div style="font-size: 0.8rem; opacity: 0.9;">Online now</div>
+                    </div>
+                </div>
+                <button id="closeChat" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem;" aria-label="Close chat" onclick="toggleChat()">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="chat-body" id="chatBody" role="log" aria-live="polite" aria-atomic="false">
+                <div class="message bot-msg" role="article">
+                    Hello! 👋 Welcome to T.I.T.E. How can I help you today?
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Type your message..." maxlength="2000" aria-label="Type your message" onkeypress="if(event.key==='Enter')sendMessage()">
+                <button onclick="sendMessage()" aria-label="Send message" style="background: var(--primary-color); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer;">
+                    <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+        <button class="chat-button" id="chatBtn" onclick="toggleChat()" aria-label="Open chat" aria-haspopup="dialog" aria-expanded="false">
+            <i class="fa-solid fa-comments" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <!-- AUTH MODAL -->
+    <div class="modal-overlay" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('authModal')" aria-label="Close authentication modal">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+            <h2 class="modal-title" id="authTitle">Welcome to T.I.T.E</h2>
+            
+            <div class="tab-buttons" role="tablist" aria-label="Authentication options">
+                <button class="tab-btn active" onclick="switchTab('login')" role="tab" aria-selected="true" id="tab-login">Login</button>
+                <button class="tab-btn" onclick="switchTab('signup')" role="tab" aria-selected="false" id="tab-signup">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginTab" class="tab-content active" role="tabpanel" aria-labelledby="tab-login">
+                <form onsubmit="handleLogin(event)">
+                    <div class="alert alert-error" id="loginError" role="alert" aria-live="assertive" style="display: none;"></div>
+                    
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required autocomplete="email" maxlength="100">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required autocomplete="current-password" minlength="8">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;" id="loginBtn">
+                        <span class="btn-text">Login</span>
+                        <span class="btn-loading" style="display: none;"><i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Logging in...</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Sign Up Form -->
+            <div id="signupTab" class="tab-content" role="tabpanel" aria-labelledby="tab-signup" style="display: none;">
+                <form onsubmit="handleSignup(event)">
+                    <div class="alert alert-success" id="signupSuccess" role="alert" aria-live="polite" style="display: none;">
+                        Account created! Please login.
+                    </div>
+                    <div class="alert alert-error" id="signupError" role="alert" aria-live="assertive" style="display: none;"></div>
+                    
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" required autocomplete="name" maxlength="100" minlength="2">
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" required autocomplete="email" maxlength="100">
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" required autocomplete="new-password" minlength="8" 
+                               pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}" 
+                               title="Must contain at least 8 characters, including uppercase, lowercase, and number">
+                    </div>
+                    <div class="form-group">
+                        <label for="signupConfirm">Confirm Password</label>
+                        <input type="password" id="signupConfirm" required autocomplete="new-password" minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}" title="Must contain at least 8 characters, including uppercase, lowercase, and number">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;" id="signupBtn">
+                        <span class="btn-text">Create Account</span>
+                        <span class="btn-loading" style="display: none;"><i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Creating...</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROFILE MODAL -->
+    <div class="modal-overlay" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="profileTitle" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProfileModal()" aria-label="Close profile modal">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+            <h2 class="modal-title" id="profileTitle">My Profile</h2>
+            <form id="profileForm" onsubmit="saveProfile(event)">
+                <div class="alert alert-error" id="profileError" role="alert" style="display: none;"></div>
+                <div class="alert alert-success" id="profileSuccess" role="alert" style="display: none;"></div>
+                
+                <div class="form-group">
+                    <label for="profileName">Full Name</label>
+                    <input type="text" id="profileName" required maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label for="profileEmail">Email</label>
+                    <input type="email" id="profileEmail" disabled aria-label="Email cannot be changed">
+                </div>
+                <div class="form-group">
+                    <label for="profileAddress">Address</label>
+                    <input type="text" id="profileAddress" placeholder="Street No., Barangay, City, Zip" maxlength="200" autocomplete="street-address">
+                </div>
+                <div class="form-group">
+                    <label for="profilePhone">Phone</label>
+                    <input type="tel" id="profilePhone" maxlength="20" autocomplete="tel">
+                </div>
+                <div class="form-group">
+                    <label for="profilePassword">New Password (leave blank to keep current)</label>
+                    <input type="password" id="profilePassword" minlength="8" autocomplete="new-password"
+                           pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}"
+                           title="Must contain at least 8 characters, including uppercase, lowercase, and number">
+                </div>
+                <div style="display:flex; gap:8px; margin-top:1rem;">
+                    <button type="submit" class="btn btn-primary" id="profileSaveBtn">
+                        <span class="btn-text">Save Changes</span>
+                        <span class="btn-loading" style="display: none;"><i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Saving...</span>
+                    </button>
+                    <button type="button" class="btn" onclick="closeProfileModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- EDIT TICKET MODAL (Admin) -->
+    <div class="modal-overlay" id="editTicketModal" role="dialog" aria-modal="true" aria-labelledby="editTicketTitle" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeEditTicketModal()" aria-label="Close edit ticket modal">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+            <h2 class="modal-title" id="editTicketTitle">Edit Ticket</h2>
+            <form id="editTicketForm" onsubmit="saveEditedTicket(event)">
+                <input type="hidden" id="editTicketId">
+                <div class="alert alert-error" id="editTicketError" role="alert" style="display: none;"></div>
+
+                <div class="form-group">
+                    <label for="editService">Service</label>
+                    <select id="editService" required>
+                        <option value="Computer Repair">Computer Repair</option>
+                        <option value="Network Setup">Network Setup</option>
+                        <option value="Hardware Upgrade">Hardware Upgrade</option>
+                        <option value="Data Recovery">Data Recovery</option>
+                        <option value="Software Installation">Software Installation</option>
+                        <option value="Maintenance">Maintenance</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="hidden" id="editDate" required>
+                        <div id="editCalendarContainer" style="border: 1px solid #ddd; border-radius: 8px; padding: 10px; background: #fafafa;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <button type="button" class="btn" style="padding: 4px 8px; font-size: 0.85rem;" onclick="changeEditCalendarMonth(-1)">&lt;</button>
+                                <h4 id="editCalendarMonth" style="margin: 0; color: var(--secondary-color); font-size: 0.95rem;"></h4>
+                                <button type="button" class="btn" style="padding: 4px 8px; font-size: 0.85rem;" onclick="changeEditCalendarMonth(1)">&gt;</button>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; margin-bottom: 6px; font-size: 0.8rem;">
+                                <div style="font-weight: bold; color: var(--text-light);">Su</div>
+                                <div style="font-weight: bold; color: var(--text-light);">Mo</div>
+                                <div style="font-weight: bold; color: var(--text-light);">Tu</div>
+                                <div style="font-weight: bold; color: var(--text-light);">We</div>
+                                <div style="font-weight: bold; color: var(--text-light);">Th</div>
+                                <div style="font-weight: bold; color: var(--text-light);">Fr</div>
+                                <div style="font-weight: bold; color: var(--text-light);">Sa</div>
+                            </div>
+                            <div id="editCalendarDays" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px;"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Time Slot <span aria-label="required">*</span></label>
+                        <div class="time-slots" id="editTimeSlots" role="radiogroup" aria-label="Available time slots" style="grid-template-columns: 1fr 1fr; gap: 0.4rem;">
+                            <div class="time-slot" onclick="selectEditTime(this, '09:00 AM')" role="radio" aria-checked="false" tabindex="0" onkeypress="if(event.key==='Enter'||event.key===' ')selectEditTime(this, '09:00 AM')" style="padding: 0.35rem 0.2rem; font-size: 0.8rem;">09:00 AM</div>
+                            <div class="time-slot" onclick="selectEditTime(this, '11:00 AM')" role="radio" aria-checked="false" tabindex="0" onkeypress="if(event.key==='Enter'||event.key===' ')selectEditTime(this, '11:00 AM')" style="padding: 0.35rem 0.2rem; font-size: 0.8rem;">11:00 AM</div>
+                            <div class="time-slot" onclick="selectEditTime(this, '02:00 PM')" role="radio" aria-checked="false" tabindex="0" onkeypress="if(event.key==='Enter'||event.key===' ')selectEditTime(this, '02:00 PM')" style="padding: 0.35rem 0.2rem; font-size: 0.8rem;">02:00 PM</div>
+                            <div class="time-slot" onclick="selectEditTime(this, '04:00 PM')" role="radio" aria-checked="false" tabindex="0" onkeypress="if(event.key==='Enter'||event.key===' ')selectEditTime(this, '04:00 PM')" style="padding: 0.35rem 0.2rem; font-size: 0.8rem;">04:00 PM</div>
+                        </div>
+                        <input type="hidden" id="editTime" required aria-hidden="true">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editFirstName">First Name</label>
+                        <input type="text" id="editFirstName" required maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="editLastName">Last Name</label>
+                        <input type="text" id="editLastName" required maxlength="50">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail" required maxlength="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="editAddress">Address</label>
+                    <input type="text" id="editAddress" placeholder="Street, City, Zip / Barangay" maxlength="200">
+                </div>
+
+                <div class="form-group">
+                    <label for="editPhone">Phone</label>
+                    <input type="tel" id="editPhone" maxlength="20">
+                </div>
+
+                <div class="form-group">
+                    <label for="editDesc">Description</label>
+                    <textarea id="editDesc" rows="3" maxlength="1000"></textarea>
+                </div>
+
+                <div class="form-group" id="editStatusGroup">
+                    <label for="editStatus">Status</label>
+                    <select id="editStatus" required>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+
+                <div style="display:flex; gap:8px; margin-top:1rem;">
+                    <button type="submit" class="btn btn-primary" id="editTicketSaveBtn">
+                        <span class="btn-text">Save Changes</span>
+                        <span class="btn-loading" style="display: none;"><i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Saving...</span>
+                    </button>
+                    <button type="button" class="btn" onclick="closeEditTicketModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Chat Modal -->
+    <div id="userChatModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 600px; height: 80vh; display: flex; flex-direction: column;">
+            <button class="modal-close" onclick="closeUserChatModal()">&times;</button>
+            <h2 id="userChatModalTitle"><i class="fa-solid fa-comments"></i> Chat with Technician</h2>
+            <div id="userChatTicketInfo" style="margin-bottom: 1rem; padding: 0.75rem; background: #f3f4f6; border-radius: 8px; font-size: 0.875rem;"></div>
+            <div id="userChatMessages" style="flex: 1; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; background: #fafafa;"></div>
+            <div style="display: flex; gap: 0.5rem;">
+                <input type="text" id="userChatInput" placeholder="Type your message..." style="flex: 1; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px;" onkeypress="if(event.key==='Enter')sendUserChatMessage()">
+                <button class="btn btn-primary" onclick="sendUserChatMessage()"><i class="fa-solid fa-paper-plane"></i> Send</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    .user-chat-message { margin-bottom: 1rem; max-width: 80%; }
+    .user-chat-message.me { margin-left: auto; }
+    .user-chat-message.other { margin-right: auto; }
+    .user-chat-bubble { padding: 0.75rem 1rem; border-radius: 12px; font-size: 0.9375rem; line-height: 1.5; }
+    .user-chat-message.me .user-chat-bubble { background: var(--primary-color); color: white; border-bottom-right-radius: 4px; }
+    .user-chat-message.other .user-chat-bubble { background: white; color: #374151; border: 1px solid #e5e7eb; border-bottom-left-radius: 4px; }
+    .user-chat-meta { font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem; text-align: right; }
+    .user-chat-message.other .user-chat-meta { text-align: left; }
+    </style>
+
+    <!-- FOOTER -->
+    <footer role="contentinfo">
+        <div class="footer-content">
+            <h4>T.I.T.E Solutions</h4>
+            <p>Professional Technology Services for Everyone</p>
+            <div class="socials" aria-label="Social media links">
+                <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter" aria-hidden="true"></i></a>
+                <a href="#" aria-label="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+            </div>
+            <p>&copy; 2026 T.I.T.E Solutions | All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script src="js/database.js?v=3"></script>
+    <script>
+        // =========================
+        // SIMPLE STATE MANAGEMENT
+        // =========================
+        let currentUser = null;
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', async () => {
+            // Check for existing session
+            try {
+                const result = await db.auth.checkSession();
+                if (result.success) {
+                    currentUser = result.data;
+                    await updateUI();
+                } else {
+                    await updateUI();
+                }
+            } catch (error) {
+                console.error('Session check failed:', error);
+                await updateUI();
+            }
+            
+            // Setup basic event listeners
+            setupEventListeners();
+        });
+
+        // =========================
+        // EVENT LISTENERS SETUP
+        // =========================
+        function setupEventListeners() {
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (menuToggle && navLinks) {
+                menuToggle.addEventListener('click', () => {
+                    const isExpanded = navLinks.classList.toggle('active');
+                    menuToggle.setAttribute('aria-expanded', isExpanded);
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.navbar') && navLinks.classList.contains('active')) {
+                        navLinks.classList.remove('active');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+            
+            // Modal close on outside click
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                        modal.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Escape key to close modals
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal-overlay.active, .modal-overlay[style*="flex"]').forEach(modal => {
+                        modal.style.display = 'none';
+                        modal.classList.remove('active');
+                    });
+                }
+            });
+        }
+
+        // =========================
+        // UI UPDATES
+        // =========================
+        async function updateUI() {
+            const guestNav = document.getElementById('guestNav');
+            const userNav = document.getElementById('userNav');
+            const bookingLoginRequired = document.getElementById('bookingLoginRequired');
+            const bookingFormContainer = document.getElementById('bookingFormContainer');
+            const bookingRoleRestricted = document.getElementById('bookingRoleRestricted');
+            const adminNav = document.getElementById('adminNav');
+            const technicianNav = document.getElementById('technicianNav');
+            const technicianPortalLink = document.getElementById('technicianPortalLink');
+            const navBookingLink = document.getElementById('navBookingLink');
+            const navTicketsLink = document.getElementById('navTicketsLink');
+            const ticketsSection = document.getElementById('tickets');
+            const adminRedirectBtn = document.getElementById('adminRedirectBtn');
+            const techRedirectBtn = document.getElementById('techRedirectBtn');
+            const bookServiceBtn = userNav ? userNav.querySelector('.btn-book') : null;
+            const heroBookBtn = document.getElementById('heroBookBtn');
+            
+            const isAdmin = currentUser && currentUser.role === 'admin';
+            const isTechnician = currentUser && currentUser.role === 'technician';
+            const isUser = currentUser && !isAdmin && !isTechnician;
+            
+            if (currentUser) {
+                // Show user navigation
+                if (guestNav) guestNav.style.display = 'none';
+                if (userNav) {
+                    userNav.classList.add('active');
+                    userNav.style.display = 'flex';
+                }
+                
+                // Hide Book Service button for non-user roles
+                if (bookServiceBtn) bookServiceBtn.style.display = isUser ? 'inline-block' : 'none';
+                
+                // Booking section handling
+                if (isUser) {
+                    // Normal user: show booking form
+                    if (bookingLoginRequired) bookingLoginRequired.style.display = 'none';
+                    if (bookingRoleRestricted) bookingRoleRestricted.style.display = 'none';
+                    if (bookingFormContainer) bookingFormContainer.style.display = 'block';
+                    if (navBookingLink) navBookingLink.style.display = 'list-item';
+                    if (navTicketsLink) navTicketsLink.style.display = 'list-item';
+                    if (ticketsSection) ticketsSection.style.display = 'block';
+                    if (heroBookBtn) heroBookBtn.style.display = 'inline-block';
+                } else {
+                    // Admin/Technician: show restricted message
+                    if (bookingLoginRequired) bookingLoginRequired.style.display = 'none';
+                    if (bookingRoleRestricted) bookingRoleRestricted.style.display = 'block';
+                    if (bookingFormContainer) bookingFormContainer.style.display = 'none';
+                    if (navBookingLink) navBookingLink.style.display = 'none';
+                    if (navTicketsLink) navTicketsLink.style.display = 'none';
+                    if (ticketsSection) ticketsSection.style.display = 'none';
+                    if (heroBookBtn) heroBookBtn.style.display = 'none';
+                    
+                    // Show correct dashboard button
+                    if (adminRedirectBtn) adminRedirectBtn.style.display = isAdmin ? 'flex' : 'none';
+                    if (techRedirectBtn) techRedirectBtn.style.display = isTechnician ? 'flex' : 'none';
+                }
+                
+                // Show admin nav if admin
+                if (adminNav && isAdmin) {
+                    adminNav.style.display = 'block';
+                } else if (adminNav) {
+                    adminNav.style.display = 'none';
+                }
+                
+                // Show technician portal if technician
+                if (technicianPortalLink && isTechnician) {
+                    technicianPortalLink.style.display = 'block';
+                }
+                
+                // Show technician dashboard button if technician
+                if (technicianNav && isTechnician) {
+                    technicianNav.style.display = 'block';
+                } else if (technicianNav) {
+                    technicianNav.style.display = 'none';
+                }
+            } else {
+                // Show guest navigation
+                if (guestNav) guestNav.style.display = 'block';
+                if (userNav) {
+                    userNav.classList.remove('active');
+                    userNav.style.display = 'none';
+                }
+                
+                // Hide booking form, show login required
+                if (bookingLoginRequired) bookingLoginRequired.style.display = 'block';
+                if (bookingRoleRestricted) bookingRoleRestricted.style.display = 'none';
+                if (bookingFormContainer) bookingFormContainer.style.display = 'none';
+                if (navBookingLink) navBookingLink.style.display = 'none';
+                if (navTicketsLink) navTicketsLink.style.display = 'none';
+                if (ticketsSection) ticketsSection.style.display = 'none';
+                if (heroBookBtn) heroBookBtn.style.display = 'none';
+                
+                // Hide admin nav
+                if (adminNav) adminNav.style.display = 'none';
+                if (technicianNav) technicianNav.style.display = 'none';
+                if (technicianPortalLink) technicianPortalLink.style.display = 'none';
+            }
+        }
+
+        // =========================
+        // MODAL MANAGEMENT
+        // =========================
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.classList.add('active');
+                
+                // Focus first input
+                setTimeout(() => {
+                    const firstInput = modal.querySelector('input:not([disabled])');
+                    if (firstInput) firstInput.focus();
+                }, 100);
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'none';
+                modal.classList.remove('active');
+                
+                // Reset forms
+                const forms = modal.querySelectorAll('form');
+                forms.forEach(form => form.reset());
+            }
+        }
+
+        // =========================
+        // TAB SWITCHING
+        // =========================
+        function switchTab(tab) {
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
+            });
+            
+            const activeBtn = document.getElementById(`tab-${tab}`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+                activeBtn.setAttribute('aria-selected', 'true');
+            }
+            
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+                content.style.display = 'none';
+            });
+            
+            const activeContent = document.getElementById(`${tab}Tab`);
+            if (activeContent) {
+                activeContent.classList.add('active');
+                activeContent.style.display = 'block';
+            }
+        }
+
+        // =========================
+        // AUTHENTICATION
+        // =========================
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('loginError');
+            
+            // Show loading
+            if (btn) {
+                btn.querySelector('.btn-text').style.display = 'none';
+                btn.querySelector('.btn-loading').style.display = 'inline';
+                btn.disabled = true;
+            }
+            if (errorDiv) errorDiv.style.display = 'none';
+            
+            try {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                const result = await db.auth.login({ email, password });
+                
+                if (result.success) {
+                    currentUser = result.data;
+                    await updateUI();
+                    closeModal('authModal');
+                } else {
+                    throw new Error(result.error || 'Login failed');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                if (errorDiv) {
+                    errorDiv.textContent = error.message || 'Invalid credentials. Please try again.';
+                    errorDiv.style.display = 'block';
+                }
+            } finally {
+                if (btn) {
+                    btn.querySelector('.btn-text').style.display = 'inline';
+                    btn.querySelector('.btn-loading').style.display = 'none';
+                    btn.disabled = false;
+                }
+            }
+        }
+
+        async function handleSignup(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('signupBtn');
+            const errorDiv = document.getElementById('signupError');
+            const successDiv = document.getElementById('signupSuccess');
+            
+            if (btn) {
+                btn.querySelector('.btn-text').style.display = 'none';
+                btn.querySelector('.btn-loading').style.display = 'inline';
+                btn.disabled = true;
+            }
+            if (errorDiv) errorDiv.style.display = 'none';
+            if (successDiv) successDiv.style.display = 'none';
+            
+            try {
+                const name = document.getElementById('signupName').value;
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+                const confirm = document.getElementById('signupConfirm').value;
+                
+                if (password !== confirm) {
+                    throw new Error('Passwords do not match');
+                }
+                
+                const result = await db.auth.register({ name, email, password });
+                
+                if (result.success) {
+                    if (successDiv) successDiv.style.display = 'block';
+                    document.getElementById('signupName').value = '';
+                    document.getElementById('signupEmail').value = '';
+                    document.getElementById('signupPassword').value = '';
+                    document.getElementById('signupConfirm').value = '';
+                    
+                    setTimeout(() => switchTab('login'), 1500);
+                } else {
+                    throw new Error(result.error || 'Registration failed');
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                if (errorDiv) {
+                    errorDiv.textContent = error.message;
+                    errorDiv.style.display = 'block';
+                }
+            } finally {
+                if (btn) {
+                    btn.querySelector('.btn-text').style.display = 'inline';
+                    btn.querySelector('.btn-loading').style.display = 'none';
+                    btn.disabled = false;
+                }
+            }
+        }
+
+        async function logout() {
+            try {
+                await db.auth.logout();
+            } catch (error) {
+                console.error('Logout error:', error);
+            } finally {
+                currentUser = null;
+                userTickets = [];
+                const ticketList = document.getElementById('ticketList');
+                if (ticketList) ticketList.innerHTML = '';
+                await updateUI();
+                closeModal('authModal');
+            }
+        }
+
+        // =========================
+        // PROFILE FUNCTIONS
+        // =========================
+        function openProfileModal() {
+            if (!currentUser) {
+                openModal('authModal');
+                return;
+            }
+            
+            document.getElementById('profileName').value = currentUser.name || '';
+            document.getElementById('profileEmail').value = currentUser.email || '';
+            document.getElementById('profileAddress').value = currentUser.address || '';
+            document.getElementById('profilePhone').value = currentUser.phone || '';
+            document.getElementById('profilePassword').value = '';
+            
+            openModal('profileModal');
+        }
+
+        function closeProfileModal() {
+            closeModal('profileModal');
+        }
+
+        async function saveProfile(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('profileSaveBtn');
+            const errorDiv = document.getElementById('profileError');
+            const successDiv = document.getElementById('profileSuccess');
+            
+            if (btn) {
+                btn.querySelector('.btn-text').style.display = 'none';
+                btn.querySelector('.btn-loading').style.display = 'inline';
+                btn.disabled = true;
+            }
+            if (errorDiv) errorDiv.style.display = 'none';
+            if (successDiv) successDiv.style.display = 'none';
+            
+            try {
+                const updates = {
+                    name: document.getElementById('profileName').value,
+                    address: document.getElementById('profileAddress').value,
+                    phone: document.getElementById('profilePhone').value
+                };
+                
+                const password = document.getElementById('profilePassword').value;
+                if (password && password.length >= 8) {
+                    updates.password = password;
+                }
+                
+                const result = await db.users.update(updates);
+                
+                if (result.success) {
+                    currentUser.name = updates.name;
+                    currentUser.address = updates.address;
+                    currentUser.phone = updates.phone;
+                    
+                    if (successDiv) successDiv.style.display = 'block';
+                    
+                    setTimeout(() => closeProfileModal(), 1500);
+                } else {
+                    throw new Error(result.error || 'Profile update failed');
+                }
+            } catch (error) {
+                console.error('Profile update error:', error);
+                if (errorDiv) {
+                    errorDiv.textContent = error.message;
+                    errorDiv.style.display = 'block';
+                }
+            } finally {
+                if (btn) {
+                    btn.querySelector('.btn-text').style.display = 'inline';
+                    btn.querySelector('.btn-loading').style.display = 'none';
+                    btn.disabled = false;
+                }
+            }
+        }
+
+        function closeEditTicketModal() {
+            closeModal('editTicketModal');
+        }
+
+        async function openEditTicketModal(ticketId) {
+            const ticket = userTickets.find(t => String(t.id) === String(ticketId));
+            if (!ticket) {
+                alert('Ticket not found');
+                return;
+            }
+
+            document.getElementById('editTicketId').value = ticket.id;
+
+            // Populate service dropdown from available services
+            const editServiceSelect = document.getElementById('editService');
+            if (editServiceSelect && availableServices.length > 0) {
+                editServiceSelect.innerHTML = availableServices.map(s =>
+                    `<option value="${escapeHtml(s.name)}">${escapeHtml(s.name)}</option>`
+                ).join('');
+            }
+            editServiceSelect.value = ticket.service || '';
+
+            await initEditCalendar(ticket.date || '');
+            selectEditTimeSlot(ticket.time || '');
+            document.getElementById('editFirstName').value = ticket.firstName || '';
+            document.getElementById('editLastName').value = ticket.lastName || '';
+            document.getElementById('editEmail').value = ticket.email || '';
+            document.getElementById('editPhone').value = ticket.phone || '';
+            document.getElementById('editAddress').value = ticket.address || '';
+            document.getElementById('editDesc').value = ticket.description || '';
+            document.getElementById('editStatus').value = ticket.status || 'pending';
+
+            // Hide status field for non-admin users
+            const statusGroup = document.getElementById('editStatusGroup');
+            if (statusGroup) {
+                statusGroup.style.display = (currentUser && currentUser.role === 'admin') ? 'block' : 'none';
+            }
+
+            // Hide error
+            const errorDiv = document.getElementById('editTicketError');
+            if (errorDiv) errorDiv.style.display = 'none';
+
+            openModal('editTicketModal');
+        }
+
+        async function saveEditedTicket(e) {
+            e.preventDefault();
+            const ticketId = document.getElementById('editTicketId')?.value?.trim();
+            if (!ticketId) {
+                alert('Ticket ID is missing');
+                return;
+            }
+
+            const isAdmin = currentUser && currentUser.role === 'admin';
+            const updates = {
+                firstName: document.getElementById('editFirstName')?.value || '',
+                lastName: document.getElementById('editLastName')?.value || '',
+                email: document.getElementById('editEmail')?.value || '',
+                phone: document.getElementById('editPhone')?.value || '',
+                service: document.getElementById('editService')?.value || '',
+                date: document.getElementById('editDate')?.value || '',
+                time: document.getElementById('editTime')?.value || '',
+                address: document.getElementById('editAddress')?.value || '',
+                description: document.getElementById('editDesc')?.value || ''
+            };
+
+            // Only admins can change status
+            if (isAdmin) {
+                updates.status = document.getElementById('editStatus')?.value || 'pending';
+            }
+
+            try {
+                const result = await db.tickets.update(ticketId, updates);
+                if (!result.success) throw new Error(result.error || 'Failed to update ticket');
+                closeEditTicketModal();
+                await filterTickets('all');
+            } catch (error) {
+                const errorDiv = document.getElementById('editTicketError');
+                if (errorDiv) {
+                    errorDiv.textContent = error.message || 'Failed to update ticket';
+                    errorDiv.style.display = 'block';
+                }
+            }
+        }
+
+        // =========================
+        // UTILITY FUNCTIONS
+        // =========================
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // =========================
+        // EXPOSE FUNCTIONS TO GLOBAL SCOPE
+        // =========================
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+        window.switchTab = switchTab;
+        window.handleLogin = handleLogin;
+        window.handleSignup = handleSignup;
+        window.logout = logout;
+        window.openProfileModal = openProfileModal;
+        window.closeProfileModal = closeProfileModal;
+        window.saveProfile = saveProfile;
+        window.closeEditTicketModal = closeEditTicketModal;
+        window.openEditTicketModal = openEditTicketModal;
+        window.saveEditedTicket = saveEditedTicket;
+        window.changeEditCalendarMonth = changeEditCalendarMonth;
+        window.initEditCalendar = initEditCalendar;
+        window.renderEditCalendar = renderEditCalendar;
+        window.selectEditCalendarDay = selectEditCalendarDay;
+        window.selectEditTime = selectEditTime;
+        window.selectEditTimeSlot = selectEditTimeSlot;
+        window.loadEditUnavailableTimeSlots = loadEditUnavailableTimeSlots;
+        window.escapeHtml = escapeHtml;
+        window.toggleDropdown = toggleDropdown;
+        window.selectService = selectService;
+        window.selectTime = selectTime;
+        window.filterTickets = filterTickets;
+        window.toggleChat = toggleChat;
+        window.sendMessage = sendMessage;
+        window.submitBooking = submitBooking;
+        window.submitContact = submitContact;
+        window.onServiceChange = onServiceChange;
+        window.onDateChange = onDateChange;
+        window.onTechnicianChange = onTechnicianChange;
+        window.loadServices = loadServices;
+        window.initCalendar = initCalendar;
+        window.renderCalendar = renderCalendar;
+        window.selectCalendarDay = selectCalendarDay;
+
+        // =========================
+        // BOOKING FUNCTIONS
+        // =========================
+        let availableServices = [];
+        let selectedTime = null;
+
+        async function loadServices() {
+            try {
+                const result = await db.services.getAll(true);
+                if (result.success) {
+                    availableServices = result.data;
+                    const serviceSelect = document.getElementById('bookService');
+                    if (serviceSelect) {
+                        serviceSelect.innerHTML = '<option value="">Select a service</option>';
+                        availableServices.forEach(service => {
+                            const option = document.createElement('option');
+                            option.value = service.name;
+                            option.textContent = `${service.name} - ₱${service.base_price}`;
+                            serviceSelect.appendChild(option);
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading services:', error);
+            }
+        }
+
+        function selectService(serviceName) {
+            const serviceSelect = document.getElementById('bookService');
+            if (serviceSelect) {
+                serviceSelect.value = serviceName;
+                onServiceChange();
+            }
+            // Scroll to booking section
+            document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function selectTime(element, time) {
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.classList.remove('selected');
+                slot.setAttribute('aria-checked', 'false');
+            });
+            element.classList.add('selected');
+            element.setAttribute('aria-checked', 'true');
+            selectedTime = time;
+            document.getElementById('bookTime').value = time;
+        }
+
+        async function onServiceChange() {
+            const serviceSelect = document.getElementById('bookService');
+            const selectedService = serviceSelect.value;
+            
+            if (selectedService) {
+                const service = availableServices.find(s => s.name === selectedService);
+                if (service) {
+                    document.getElementById('summaryService').textContent = service.name;
+                    document.getElementById('summaryPrice').textContent = `₱${service.base_price}`;
+                }
+            }
+        }
+
+        async function onDateChange() {
+            const dateInput = document.getElementById('bookDate');
+            const date = dateInput.value;
+            if (date) {
+                const formattedDate = new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                document.getElementById('summaryDate').textContent = formattedDate;
+
+                // Load unavailable time slots for this date
+                await loadUnavailableTimeSlots(date);
+            }
+        }
+
+        async function loadUnavailableTimeSlots(date) {
+            const timeSlotsContainer = document.getElementById('timeSlots');
+            const loadingIndicator = document.getElementById('timeSlotsLoading');
+            
+            if (loadingIndicator) loadingIndicator.style.display = 'block';
+            
+            try {
+                const result = await db.availability.getAll({ date: date });
+                
+                if (result.success) {
+                    console.log('[loadUnavailableTimeSlots] availability API raw for', date, ':', result.data);
+                    // Get GLOBAL unavailable time slots only (admin-set, not technician-specific)
+                    const unavailableSlots = result.data
+                        .filter(avail => avail.is_available === false && (avail.technician_id === 0 || avail.technician_id === null))
+                        .map(avail => avail.time_slot);
+                    console.log('[loadUnavailableTimeSlots] filtered global unavailable slots:', unavailableSlots);
+                    
+                    // Disable unavailable time slots
+                    const allTimeSlots = ['09:00 AM', '11:00 AM', '02:00 PM', '04:00 PM'];
+                    timeSlotsContainer.querySelectorAll('.time-slot').forEach(slot => {
+                        const slotTime = slot.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+                        if (unavailableSlots.includes(slotTime)) {
+                            slot.style.opacity = '0.3';
+                            slot.style.cursor = 'not-allowed';
+                            slot.style.pointerEvents = 'none';
+                            slot.title = 'This time slot is unavailable';
+                        } else {
+                            slot.style.opacity = '1';
+                            slot.style.cursor = 'pointer';
+                            slot.style.pointerEvents = 'auto';
+                            slot.title = '';
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading unavailable time slots:', error);
+            } finally {
+                if (loadingIndicator) loadingIndicator.style.display = 'none';
+            }
+        }
+
+        async function onTechnicianChange() {
+            const date = document.getElementById('bookDate').value;
+            if (date) {
+                await loadUnavailableTimeSlots(date);
+            }
+        }
+
+        async function submitBooking(e) {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                openModal('authModal');
+                return;
+            }
+            
+            const firstName = document.getElementById('bookFirstName').value;
+            const lastName = document.getElementById('bookLastName').value;
+            const service = document.getElementById('bookService').value;
+            const date = document.getElementById('bookDate').value;
+            const time = selectedTime;
+
+            // Validate that the selected time slot is not unavailable
+            try {
+                const result = await db.availability.getAll({ date: date });
+                
+                if (result.success) {
+                    const unavailableSlot = result.data.find(avail => 
+                        avail.is_available === false && avail.time_slot === time
+                    );
+                    
+                    if (unavailableSlot) {
+                        alert('This time slot is not available. Please select a different time.');
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking availability:', error);
+            }
+            const email = currentUser.email;
+            const phone = document.getElementById('bookPhone').value || currentUser.phone || '';
+            const address = document.getElementById('bookAddress').value || currentUser.address || '';
+            const description = document.getElementById('bookDesc').value;
+            
+            if (!service || !date || !time) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            try {
+                const result = await db.tickets.create({
+                    firstName,
+                    lastName,
+                    service,
+                    date,
+                    time,
+                    email,
+                    phone,
+                    address,
+                    description
+                });
+                
+                if (result.success) {
+                    alert('Booking submitted successfully!');
+                    document.getElementById('bookingForm').reset();
+                    selectedTime = null;
+                    document.querySelectorAll('.time-slot').forEach(slot => {
+                        slot.classList.remove('selected');
+                        slot.setAttribute('aria-checked', 'false');
+                    });
+                } else {
+                    alert('Booking failed: ' + result.error);
+                }
+            } catch (error) {
+                alert('Booking failed: ' + error.message);
+            }
+        }
+
+        // =========================
+        // UTILITY FUNCTIONS
+        // =========================
+        function toggleDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown) {
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            }
+        }
+
+        let userTickets = [];
+
+        async function filterTickets(status) {
+            // Update tab styling
+            document.querySelectorAll('.ticket-tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-selected', 'false');
+            });
+            document.getElementById(`tab-${status}`).classList.add('active');
+            document.getElementById(`tab-${status}`).setAttribute('aria-selected', 'true');
+            
+            // Load tickets with filter
+            try {
+                const result = await db.tickets.getAll(status);
+                if (result.success) {
+                    userTickets = result.data;
+                    // Update ticket list display
+                    const ticketList = document.getElementById('ticketList');
+                    if (ticketList) {
+                        if (result.data.length === 0) {
+                            ticketList.innerHTML = '<p>No tickets found.</p>';
+                        } else {
+                            ticketList.innerHTML = result.data.map(ticket => {
+                                const canEdit = !['completed', 'cancelled'].includes(ticket.status);
+                                const techAvatar = ticket.technician_avatar || 'pics/guest.png';
+                                const techName = ticket.technician_name || 'Technician';
+                                return `
+                                <div class="ticket-item">
+                                    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                                        <div>
+                                            <h4>${escapeHtml(ticket.service)}</h4>
+                                            <p>${escapeHtml(ticket.date)} at ${escapeHtml(ticket.time)}</p>
+                                        </div>
+                                        <span class="status ${ticket.status}">${ticket.status}</span>
+                                    </div>
+                                    ${ticket.assigned_technician_id ? `
+                                    <div style="display:flex;align-items:center;gap:0.5rem;margin-top:8px;padding:6px 10px;background:#f0f4ff;border-radius:8px;border:1px solid #dbeafe;">
+                                        <img src="${escapeHtml(techAvatar)}" alt="${escapeHtml(techName)}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #3b82f6;" onerror="this.src='pics/guest.png'">
+                                        <div>
+                                            <div style="font-weight:600;font-size:0.85rem;color:#1e40af;">${escapeHtml(techName)}</div>
+                                            <div style="font-size:0.75rem;color:#6b7280;">Assigned Technician</div>
+                                        </div>
+                                    </div>` : ''}
+                                    <div style="margin-top:8px;display:flex;gap:8px;">
+                                    ${canEdit ? `<button class="btn" style="padding:4px 12px;font-size:0.85rem;" onclick="openEditTicketModal('${escapeHtml(String(ticket.id))}')"><i class="fa-solid fa-pen" aria-hidden="true"></i> Edit</button>` : ''}
+                                    ${ticket.assigned_technician_id ? `<button class="btn btn-info" style="padding:4px 12px;font-size:0.85rem;background:#3b82f6;color:white;" onclick="openUserChatModal(${ticket.id}, '${ticket.id}', '${escapeHtml(techName)}')"><i class="fa-solid fa-comments"></i> Chat</button>` : ''}
+                                    </div>
+                                </div>
+                            `}).join('');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error filtering tickets:', error);
+            }
+        }
+
+        async function submitContact(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const message = document.getElementById('contactMessage').value;
+            
+            try {
+                const result = await db.messages.send({ name, email, message });
+                if (result.success) {
+                    alert('Message sent successfully!');
+                    const contactForm = document.querySelector('.contact-form');
+                    if (contactForm) contactForm.reset();
+                } else {
+                    alert('Failed to send message: ' + result.error);
+                }
+            } catch (error) {
+                alert('Failed to send message: ' + error.message);
+            }
+        }
+
+        function toggleChat() {
+            const chatWidget = document.getElementById('chatWindow');
+            const chatBtn = document.getElementById('chatBtn');
+            if (chatWidget && chatBtn) {
+                const isOpen = chatWidget.style.display === 'block';
+                chatWidget.style.display = isOpen ? 'none' : 'block';
+                chatBtn.setAttribute('aria-expanded', !isOpen);
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            try {
+                const result = await db.messages.send({ message, sender: 'user' });
+                if (result.success) {
+                    input.value = '';
+                    // Add message to chat display
+                    const chatMessages = document.getElementById('chatBody');
+                    if (chatMessages) {
+                        const msgDiv = document.createElement('div');
+                        msgDiv.className = 'message user-msg';
+                        msgDiv.textContent = message;
+                        chatMessages.appendChild(msgDiv);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
+        }
+
+        // =========================
+        // EDIT MODAL CALENDAR FUNCTIONS
+        // =========================
+        let editCalendarDate = new Date();
+        let editSelectedDate = null;
+        let editSelectedElement = null;
+
+        async function changeEditCalendarMonth(delta) {
+            editCalendarDate.setMonth(editCalendarDate.getMonth() + delta);
+            await renderEditCalendar(editCalendarDate);
+        }
+
+        async function initEditCalendar(ticketDateStr) {
+            if (ticketDateStr) {
+                const [year, month, day] = ticketDateStr.split('-').map(Number);
+                editCalendarDate = new Date(year, month - 1, 1);
+                editSelectedDate = new Date(year, month - 1, day);
+            } else {
+                editCalendarDate = new Date();
+                editSelectedDate = null;
+            }
+            editSelectedElement = null;
+            await renderEditCalendar(editCalendarDate);
+            // If a date was pre-selected, also load unavailable time slots
+            if (ticketDateStr) {
+                await loadEditUnavailableTimeSlots(ticketDateStr);
+            }
+        }
+
+        async function renderEditCalendar(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+            const monthElement = document.getElementById('editCalendarMonth');
+            if (monthElement) {
+                monthElement.textContent = `${monthNames[month]} ${year}`;
+            }
+
+            const firstDay = new Date(year, month, 1);
+            const startingDay = firstDay.getDay();
+            const lastDay = new Date(year, month + 1, 0);
+            const totalDays = lastDay.getDate();
+
+            const calendarDays = document.getElementById('editCalendarDays');
+            if (!calendarDays) return;
+
+            calendarDays.innerHTML = '';
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // Load availability data
+            let unavailabilityData = [];
+            try {
+                const result = await db.availability.getAll();
+                if (result.success) {
+                    unavailabilityData = result.data.filter(avail =>
+                        avail.is_available === false &&
+                        (avail.technician_id === 0 || avail.technician_id === null)
+                    );
+                }
+            } catch (error) {
+                console.error('Error loading unavailability:', error);
+            }
+
+            // Group by date
+            const unavailabilityByDate = {};
+            unavailabilityData.forEach(avail => {
+                if (!unavailabilityByDate[avail.date]) {
+                    unavailabilityByDate[avail.date] = new Set();
+                }
+                unavailabilityByDate[avail.date].add(avail.time_slot);
+            });
+
+            for (let i = 0; i < startingDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.style.padding = '8px';
+                calendarDays.appendChild(emptyCell);
+            }
+
+            const allTimeSlots = ['09:00 AM', '11:00 AM', '02:00 PM', '04:00 PM'];
+
+            for (let day = 1; day <= totalDays; day++) {
+                const currentDate = new Date(year, month, day);
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                dayElement.style.padding = '8px';
+                dayElement.style.textAlign = 'center';
+                dayElement.style.borderRadius = '4px';
+                dayElement.style.border = '1px solid #e5e7eb';
+                dayElement.style.fontSize = '0.85rem';
+
+                const unavailableSlots = unavailabilityByDate[dateStr];
+                const isFullyUnavailable = unavailableSlots && unavailableSlots.size === allTimeSlots.length;
+
+                if (currentDate < today || isFullyUnavailable) {
+                    dayElement.classList.add('disabled');
+                    dayElement.style.color = '#9ca3af';
+                    dayElement.style.cursor = 'not-allowed';
+                    dayElement.style.background = isFullyUnavailable ? '#fee2e2' : '#f3f4f6';
+                    if (isFullyUnavailable) {
+                        dayElement.style.borderColor = '#fecaca';
+                        dayElement.title = 'This date is fully unavailable';
+                    }
+                } else {
+                    dayElement.style.cursor = 'pointer';
+                    dayElement.style.background = 'white';
+                    dayElement.onclick = () => selectEditCalendarDay(currentDate, dayElement);
+
+                    if (editSelectedDate && currentDate.toDateString() === editSelectedDate.toDateString()) {
+                        dayElement.style.background = '#2563eb';
+                        dayElement.style.color = 'white';
+                        dayElement.style.borderColor = '#2563eb';
+                        editSelectedElement = dayElement;
+                    }
+
+                    dayElement.onmouseenter = () => {
+                        if (!(editSelectedDate && currentDate.toDateString() === editSelectedDate.toDateString())) {
+                            dayElement.style.background = '#2563eb';
+                            dayElement.style.color = 'white';
+                        }
+                    };
+                    dayElement.onmouseleave = () => {
+                        if (!(editSelectedDate && currentDate.toDateString() === editSelectedDate.toDateString())) {
+                            dayElement.style.background = 'white';
+                            dayElement.style.color = '';
+                            dayElement.style.borderColor = '#e5e7eb';
+                        }
+                    };
+                }
+
+                calendarDays.appendChild(dayElement);
+            }
+        }
+
+        async function selectEditCalendarDay(date, element) {
+            if (editSelectedElement) {
+                editSelectedElement.style.background = 'white';
+                editSelectedElement.style.color = '';
+                editSelectedElement.style.borderColor = '#e5e7eb';
+            }
+
+            element.style.background = '#2563eb';
+            element.style.color = 'white';
+            element.style.borderColor = '#2563eb';
+            editSelectedDate = date;
+            editSelectedElement = element;
+
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const dateStr = `${year}-${month}-${day}`;
+            document.getElementById('editDate').value = dateStr;
+
+            // Load unavailable time slots for selected date
+            await loadEditUnavailableTimeSlots(dateStr);
+        }
+
+        async function loadEditUnavailableTimeSlots(date) {
+            const slotsContainer = document.getElementById('editTimeSlots');
+            if (!slotsContainer) return;
+
+            try {
+                const result = await db.availability.getAll({ date: date });
+                if (result.success) {
+                    const unavailableSlots = result.data
+                        .filter(avail => avail.is_available === false && (avail.technician_id === 0 || avail.technician_id === null))
+                        .map(avail => avail.time_slot);
+
+                    const allTimeSlots = ['09:00 AM', '11:00 AM', '02:00 PM', '04:00 PM'];
+                    slotsContainer.querySelectorAll('.time-slot').forEach(slot => {
+                        const slotTime = slot.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+                        if (unavailableSlots.includes(slotTime)) {
+                            slot.style.opacity = '0.3';
+                            slot.style.cursor = 'not-allowed';
+                            slot.style.pointerEvents = 'none';
+                            slot.title = 'This time slot is unavailable';
+                        } else {
+                            slot.style.opacity = '1';
+                            slot.style.cursor = 'pointer';
+                            slot.style.pointerEvents = 'auto';
+                            slot.title = '';
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading unavailable time slots:', error);
+            }
+        }
+
+        function selectEditTime(element, time) {
+            document.querySelectorAll('#editTimeSlots .time-slot').forEach(slot => {
+                slot.classList.remove('selected');
+                slot.setAttribute('aria-checked', 'false');
+            });
+            element.classList.add('selected');
+            element.setAttribute('aria-checked', 'true');
+            document.getElementById('editTime').value = time;
+        }
+
+        function selectEditTimeSlot(time) {
+            if (!time) return;
+            const slots = document.querySelectorAll('#editTimeSlots .time-slot');
+            slots.forEach(slot => {
+                const slotTime = slot.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+                if (slotTime === time) {
+                    slot.classList.add('selected');
+                    slot.setAttribute('aria-checked', 'true');
+                    document.getElementById('editTime').value = time;
+                } else {
+                    slot.classList.remove('selected');
+                    slot.setAttribute('aria-checked', 'false');
+                }
+            });
+        }
+
+        // =========================
+        // CALENDAR FUNCTIONS
+        // =========================
+        let currentCalendarDate = new Date();
+        let selectedCalendarDate = null;
+        let selectedCalendarElement = null;
+
+        function initCalendar() {
+            renderCalendar(currentCalendarDate);
+            
+            document.getElementById('prevMonth').addEventListener('click', () => {
+                currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+                renderCalendar(currentCalendarDate);
+            });
+            
+            document.getElementById('nextMonth').addEventListener('click', () => {
+                currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+                renderCalendar(currentCalendarDate);
+            });
+        }
+
+        async function renderCalendar(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+            const monthElement = document.getElementById('calendarMonth');
+            if (monthElement) {
+                monthElement.textContent = `${monthNames[month]} ${year}`;
+            }
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startingDay = firstDay.getDay();
+            const totalDays = lastDay.getDate();
+            
+            const calendarDays = document.getElementById('calendarDays');
+            if (!calendarDays) return;
+            
+            calendarDays.innerHTML = '';
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // Get all global UNAVAILABILITY for the month
+            const monthStart = `${year}-${String(month + 1).padStart(2, '0')}-01`;
+            const monthEnd = `${year}-${String(month + 1).padStart(2, '0')}-${String(totalDays).padStart(2, '0')}`;
+            
+            let unavailabilityData = [];
+            try {
+                const result = await db.availability.getAll();
+                console.log('[renderCalendar] availability API raw:', result);
+                if (result.success) {
+                    // Only count GLOBAL unavailable entries (admin-set, not technician-specific)
+                    unavailabilityData = result.data.filter(avail =>
+                        avail.is_available === false &&
+                        (avail.technician_id === 0 || avail.technician_id === null)
+                    );
+                    console.log('[renderCalendar] filtered global unavailable:', unavailabilityData);
+                }
+            } catch (error) {
+                console.error('Error loading unavailability:', error);
+            }
+            
+            // Group unavailability by date
+            const unavailabilityByDate = {};
+            unavailabilityData.forEach(avail => {
+                if (!unavailabilityByDate[avail.date]) {
+                    unavailabilityByDate[avail.date] = new Set();
+                }
+                unavailabilityByDate[avail.date].add(avail.time_slot);
+            });
+            
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < startingDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.style.padding = '10px';
+                calendarDays.appendChild(emptyCell);
+            }
+            
+            // Add days
+            for (let day = 1; day <= totalDays; day++) {
+                const currentDate = new Date(year, month, day);
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                dayElement.style.padding = '10px';
+                dayElement.style.textAlign = 'center';
+                dayElement.style.borderRadius = '5px';
+                dayElement.style.cursor = 'pointer';
+                dayElement.style.transition = 'all 0.3s ease';
+                dayElement.style.background = 'white';
+                dayElement.style.border = '1px solid #e5e7eb';
+                
+                // Check if day is in the past
+                if (currentDate < today) {
+                    dayElement.style.color = '#9ca3af';
+                    dayElement.style.cursor = 'not-allowed';
+                    dayElement.style.background = '#f3f4f6';
+                } else {
+                    // Check if day is fully unavailable (all 4 time slots marked as unavailable)
+                    const allTimeSlots = ['09:00 AM', '11:00 AM', '02:00 PM', '04:00 PM'];
+                    const unavailableSlots = unavailabilityByDate[dateStr];
+                    const isFullyUnavailable = unavailableSlots && unavailableSlots.size === allTimeSlots.length;
+                    
+                    if (isFullyUnavailable) {
+                        dayElement.style.color = '#9ca3af';
+                        dayElement.style.cursor = 'not-allowed';
+                        dayElement.style.background = '#fee2e2';
+                        dayElement.style.borderColor = '#fecaca';
+                        dayElement.title = 'This date is fully unavailable';
+                    } else {
+                        dayElement.onclick = () => selectCalendarDay(currentDate, dayElement);
+                        
+                        // Highlight selected day
+                        if (selectedCalendarDate && currentDate.toDateString() === selectedCalendarDate.toDateString()) {
+                            dayElement.style.background = '#2563eb';
+                            dayElement.style.color = 'white';
+                            dayElement.style.borderColor = '#2563eb';
+                        }
+                        
+                        // Add hover effect
+                        dayElement.onmouseenter = () => {
+                            if (!(selectedCalendarDate && currentDate.toDateString() === selectedCalendarDate.toDateString())) {
+                                dayElement.style.background = '#2563eb';
+                                dayElement.style.color = 'white';
+                            }
+                        };
+                        dayElement.onmouseleave = () => {
+                            if (!(selectedCalendarDate && currentDate.toDateString() === selectedCalendarDate.toDateString())) {
+                                dayElement.style.background = 'white';
+                                dayElement.style.color = '';
+                                dayElement.style.borderColor = '#e5e7eb';
+                            }
+                        };
+                    }
+                }
+                calendarDays.appendChild(dayElement);
+            }
+        }
+        
+        function selectCalendarDay(date, element) {
+            const currentMonth = currentCalendarDate.getMonth();
+            const currentYear = currentCalendarDate.getFullYear();
+
+            // Remove previous selection and reset only the previously selected element
+            if (selectedCalendarElement) {
+                selectedCalendarElement.classList.remove('selected');
+                selectedCalendarElement.style.background = 'white';
+                selectedCalendarElement.style.color = '';
+                selectedCalendarElement.style.borderColor = '#e5e7eb';
+                selectedCalendarElement.style.cursor = 'pointer';
+            }
+
+            // Add selection to clicked day
+            element.style.background = '#2563eb';
+            element.style.color = 'white';
+            element.style.borderColor = '#2563eb';
+            selectedCalendarDate = date;
+            selectedCalendarElement = element;
+            
+            // Update hidden date input using local date (avoid UTC shift from toISOString)
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const formattedDate = `${year}-${month}-${day}`;
+            document.getElementById('bookDate').value = formattedDate;
+            
+            // Update summary
+            const formattedDisplay = date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('summaryDate').textContent = formattedDisplay;
+            
+            // Trigger date change event
+            onDateChange();
+        }
+
+        // User Chat Functions
+        let currentUserChatTicketId = null;
+        let userChatRefreshInterval = null;
+
+        function openUserChatModal(ticketId, ticketNumber, technicianName) {
+            currentUserChatTicketId = ticketId;
+            document.getElementById('userChatModalTitle').innerHTML = `<i class="fa-solid fa-comments"></i> Chat with Technician`;
+            document.getElementById('userChatTicketInfo').innerHTML = `<strong>Ticket #${ticketNumber}</strong> - ${technicianName}`;
+            document.getElementById('userChatModal').classList.add('active');
+            loadUserChatMessages();
+            // Auto-refresh every 10 seconds
+            userChatRefreshInterval = setInterval(loadUserChatMessages, 10000);
+        }
+
+        function closeUserChatModal() {
+            document.getElementById('userChatModal').classList.remove('active');
+            currentUserChatTicketId = null;
+            if (userChatRefreshInterval) {
+                clearInterval(userChatRefreshInterval);
+                userChatRefreshInterval = null;
+            }
+        }
+
+        async function loadUserChatMessages() {
+            if (!currentUserChatTicketId) return;
+            
+            try {
+                const result = await db.ticketMessages.getByTicket(currentUserChatTicketId);
+                if (result.success) {
+                    renderUserChatMessages(result.data);
+                }
+            } catch (error) {
+                console.error('Failed to load messages:', error);
+            }
+        }
+
+        function renderUserChatMessages(messages) {
+            const container = document.getElementById('userChatMessages');
+            if (messages.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #9ca3af; padding: 2rem;">No messages yet. Start the conversation!</p>';
+                return;
+            }
+            
+            container.innerHTML = messages.map(msg => {
+                const isMe = msg.sender_type === 'user';
+                return `
+                    <div class="user-chat-message ${isMe ? 'me' : 'other'}">
+                        <div class="user-chat-bubble">${escapeHtml(msg.message)}</div>
+                        <div class="user-chat-meta">${escapeHtml(msg.sender_name)} &bull; ${formatChatTime(msg.created_at)}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Scroll to bottom
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function sendUserChatMessage() {
+            const input = document.getElementById('userChatInput');
+            const message = input.value.trim();
+            if (!message || !currentUserChatTicketId) return;
+            
+            try {
+                const result = await db.ticketMessages.send(currentUserChatTicketId, message);
+                if (result.success) {
+                    input.value = '';
+                    loadUserChatMessages();
+                } else {
+                    alert('Failed to send message: ' + (result.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Failed to send message:', error);
+                alert('Failed to send message. Please try again.');
+            }
+        }
+
+        function formatChatTime(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleString('en-US', { 
+                month: 'short', day: 'numeric', 
+                hour: 'numeric', minute: '2-digit',
+                hour12: true 
+            });
+        }
+
+        // Close modal on outside click
+        document.getElementById('userChatModal')?.addEventListener('click', function(e) {
+            if (e.target === this) closeUserChatModal();
+        });
+
+        // Initialize booking system when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize calendar
+            initCalendar();
+            
+            // Load services
+            loadServices();
+            
+            // Add technician change listener
+            const technicianSelect = document.getElementById('bookTechnician');
+            if (technicianSelect) {
+                technicianSelect.addEventListener('change', onTechnicianChange);
+            }
+        });
+
+</script>
+</body>
+</html>

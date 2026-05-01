@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technician Dashboard | T.I.T.E</title>
+    <link rel="stylesheet" href="css/stylesheet.css">
+    <link rel="stylesheet" href="css/technician-portal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<div class="tech-layout">
+    <button class="tech-sidebar-toggle" id="techSidebarToggle" aria-label="Toggle sidebar">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="tech-sidebar-overlay" id="techSidebarOverlay"></div>
+    <aside class="tech-sidebar" id="techSidebar">
+        <div class="tech-logo"><h2>T.I.T.E Tech</h2></div>
+        <div class="tech-profile"><div id="techAvatar" class="tech-avatar"><i class="fa-solid fa-user"></i></div><div id="techName">Technician</div><small id="techEmail"></small></div>
+        <ul class="tech-nav">
+            <li><a class="active" href="technician-dashboard.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="technician-assignments.html"><i class="fa-solid fa-clipboard-list"></i> Assignments</a></li>
+            <li><a href="technician-profile.html"><i class="fa-solid fa-user"></i> Profile</a></li>
+            <li><a href="index.html"><i class="fa-solid fa-arrow-left"></i> Back to Site</a></li>
+        </ul>
+    </aside>
+    <main class="tech-main">
+        <div class="tech-header"><div><h1>Dashboard</h1><p>Your account-specific assignments</p></div></div>
+        <div class="tech-grid">
+            <div class="tech-panel tech-stat"><h3 id="totalAssignments">0</h3><p>Total</p></div>
+            <div class="tech-panel tech-stat"><h3 id="pendingAssignments">0</h3><p>Pending</p></div>
+            <div class="tech-panel tech-stat"><h3 id="completedAssignments">0</h3><p>Completed</p></div>
+        </div>
+        <div class="tech-panel"><h3>Today's Schedule</h3><div id="todaySchedule"></div></div>
+    </main>
+</div>
+<script src="js/database.js"></script>
+<script src="js/technician-portal.js"></script>
+<script>techPortal.init('dashboard');</script>
+</body>
+</html>

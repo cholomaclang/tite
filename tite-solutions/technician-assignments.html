@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technician Assignments | T.I.T.E</title>
+    <link rel="stylesheet" href="css/stylesheet.css">
+    <link rel="stylesheet" href="css/technician-portal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<div class="tech-layout">
+    <button class="tech-sidebar-toggle" id="techSidebarToggle" aria-label="Toggle sidebar">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="tech-sidebar-overlay" id="techSidebarOverlay"></div>
+    <aside class="tech-sidebar" id="techSidebar">
+        <div class="tech-logo"><h2>T.I.T.E Tech</h2></div>
+        <div class="tech-profile"><div id="techAvatar" class="tech-avatar"><i class="fa-solid fa-user"></i></div><div id="techName">Technician</div><small id="techEmail"></small></div>
+        <ul class="tech-nav">
+            <li><a href="technician-dashboard.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+            <li><a class="active" href="technician-assignments.html"><i class="fa-solid fa-clipboard-list"></i> Assignments</a></li>
+            <li><a href="technician-profile.html"><i class="fa-solid fa-user"></i> Profile</a></li>
+            <li><a href="index.html"><i class="fa-solid fa-arrow-left"></i> Back to Site</a></li>
+        </ul>
+    </aside>
+    <main class="tech-main">
+        <div class="tech-header"><h1>My Assignments</h1></div>
+        <div class="tech-panel"><div id="assignmentsList"></div></div>
+    </main>
+</div>
+
+<!-- Chat Modal -->
+<div id="chatModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 600px; height: 80vh; display: flex; flex-direction: column;">
+        <button class="modal-close" onclick="closeChatModal()">&times;</button>
+        <h2 id="chatModalTitle"><i class="fa-solid fa-comments"></i> Ticket Chat</h2>
+        <div id="chatTicketInfo" style="margin-bottom: 1rem; padding: 0.75rem; background: #f3f4f6; border-radius: 8px; font-size: 0.875rem;"></div>
+        <div id="chatMessages" style="flex: 1; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; background: #fafafa;"></div>
+        <div style="display: flex; gap: 0.5rem;">
+            <input type="text" id="chatInput" placeholder="Type your message..." style="flex: 1; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px;" onkeypress="if(event.key==='Enter')sendChatMessage()">
+            <button class="btn btn-primary" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i> Send</button>
+        </div>
+    </div>
+</div>
+
+<!-- Assignment Details Modal -->
+<div id="detailsModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 500px;">
+        <button class="modal-close" onclick="techPortal.closeDetailsModal()">&times;</button>
+        <h2><i class="fa-solid fa-clipboard-list"></i> Assignment Details</h2>
+        <div id="detailsContent" style="margin-top: 1rem; line-height: 1.6;"></div>
+    </div>
+</div>
+
+<style>
+.chat-message { margin-bottom: 1rem; max-width: 80%; }
+.chat-message.me { margin-left: auto; }
+.chat-message.other { margin-right: auto; }
+.chat-bubble { padding: 0.75rem 1rem; border-radius: 12px; font-size: 0.9375rem; line-height: 1.5; }
+.chat-message.me .chat-bubble { background: var(--primary-color); color: white; border-bottom-right-radius: 4px; }
+.chat-message.other .chat-bubble { background: white; color: #374151; border: 1px solid #e5e7eb; border-bottom-left-radius: 4px; }
+.chat-meta { font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem; text-align: right; }
+.chat-message.other .chat-meta { text-align: left; }
+</style>
+
+<script src="js/database.js?v=3"></script>
+<script src="js/technician-portal.js?v=3"></script>
+<script>
+// Debug: log db object contents
+console.log('database.js loaded, db object:', typeof db, db ? Object.keys(db) : 'null');
+
+// Chat functions defined first
+let currentChatTicketId = null;
+let chatRefreshInterval = null;
+
+function openChatModal(ticketId, ticketNumber, customerName) {
+    console.log('Opening chat for ticket:', ticketId, ticketNumber, customerName);
+    currentChatTicketId = ticketId;
+    document.getElementById('chatModalTitle').innerHTML = '<i class="fa-solid fa-comments"></i> Chat - #' + ticketNumber;
+    document.getElementById('chatTicketInfo').innerHTML = '<strong>Customer:</strong> ' + customerName;
+    document.getElementById('chatModal').classList.add('active');
+    loadChatMessages();
+    chatRefreshInterval = setInterval(loadChatMessages, 10000);
+}
+
+function closeChatModal() {
+    document.getElementById('chatModal').classList.remove('active');
+    currentChatTicketId = null;
+    if (chatRefreshInterval) {
+        clearInterval(chatRefreshInterval);
+        chatRefreshInterval = null;
+    }
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function formatTime(timestamp) {
+    const date = new Date(timestamp);
+    return date.toLocaleString('en-US', { 
+        month: 'short', day: 'numeric', 
+        hour: 'numeric', minute: '2-digit',
+        hour12: true 
+    });
+}
+
+async function loadChatMessages() {
+    if (!currentChatTicketId) return;
+    
+    try {
+        const result = await db.ticketMessages.getByTicket(currentChatTicketId);
+        if (result.success) {
+            renderChatMessages(result.data);
+        }
+    } catch (error) {
+        console.error('Failed to load messages:', error);
+    }
+}
+
+function renderChatMessages(messages) {
+    const container = document.getElementById('chatMessages');
+    if (!container) return;
+    
+    if (messages.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #9ca3af; padding: 2rem;">No messages yet. Start the conversation!</p>';
+        return;
+    }
+    
+    container.innerHTML = messages.map(msg => {
+        const isMe = msg.sender_type === 'technician';
+        return '<div class="chat-message ' + (isMe ? 'me' : 'other') + '">' +
+            '<div class="chat-bubble">' + escapeHtml(msg.message) + '</div>' +
+            '<div class="chat-meta">' + escapeHtml(msg.sender_name) + ' &bull; ' + formatTime(msg.created_at) + '</div>' +
+            '</div>';
+    }).join('');
+    
+    container.scrollTop = container.scrollHeight;
+}
+
+async function sendChatMessage() {
+    const input = document.getElementById('chatInput');
+    if (!input) return;
+    const message = input.value.trim();
+    if (!message || !currentChatTicketId) return;
+    
+    try {
+        const result = await db.ticketMessages.send(currentChatTicketId, message);
+        if (result.success) {
+            input.value = '';
+            loadChatMessages();
+        } else {
+            alert('Failed to send message: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Failed to send message:', error);
+        alert('Failed to send message. Please try again.');
+    }
+}
+
+// Export to window BEFORE init runs
+window.openChatModal = openChatModal;
+window.closeChatModal = closeChatModal;
+window.sendChatMessage = sendChatMessage;
+
+// Now initialize
+document.addEventListener('DOMContentLoaded', function() {
+    // Close modal on outside click
+    const chatModal = document.getElementById('chatModal');
+    if (chatModal) {
+        chatModal.addEventListener('click', function(e) {
+            if (e.target === this) closeChatModal();
+        });
+    }
+    
+    // Ensure modal starts hidden (override any CSS conflicts)
+    if (chatModal) chatModal.classList.remove('active');
+    
+    // Initialize portal
+    if (typeof techPortal !== 'undefined') {
+        techPortal.init('assignments');
+    }
+});
+</script>
+</body>
+</html>

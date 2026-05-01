@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=admin-dashboard.html">
+    <title>Redirecting... | T.I.T.E Solutions</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #f8f9fa;
+        }
+        .redirect-message {
+            text-align: center;
+            padding: 2rem;
+        }
+        a { color: #2563eb; }
+    </style>
+</head>
+<body>
+    <div class="redirect-message">
+        <p>Redirecting to <a href="admin-dashboard.html">Admin Dashboard</a>...</p>
+    </div>
+</body>
+</html>
+            color: white;
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .admin-logo {
+            text-align: center;
+            padding: 0 1rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 2rem;
+        }
+        
+        .admin-logo h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .admin-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .admin-nav li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .admin-nav a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .admin-nav a:hover,
+        .admin-nav a.active {
+            background: rgba(255,255,255,0.1);
+            border-left-color: white;
+        }
+        
+        .admin-nav i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        .admin-main {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+        
+        .admin-header {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .admin-header h1 {
+            margin: 0;
+            color: var(--secondary-color);
+        }
+        
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .stat-card h3 {
+            margin: 0 0 0.5rem;
+            font-size: 2rem;
+            color: var(--secondary-color);
+        }
+        
+        .stat-card p {
+            margin: 0;
+            color: var(--text-light);
+        }
+        
+        .admin-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .admin-tabs {
+            display: flex;
+            border-bottom: 2px solid #e9ecef;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-light);
+            font-weight: 500;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .admin-tab:hover {
+            color: var(--primary-color);
+        }
+        
+        .admin-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-completed {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.85rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        /* Specialty Checkboxes Grid */
+        #specialtyCheckboxes {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+        
+        #specialtyCheckboxes label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.95rem;
+        }
+        
+        #specialtyCheckboxes label:hover {
+            background: #f3f4f6;
+        }
+        
+        #specialtyCheckboxes input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        
+        /* Avatar Upload Preview */
+        .avatar-upload {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ddd;
+            display: none;
+        }
+        
+        .avatar-preview.show {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            
+            .admin-sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .admin-main {
+                margin-left: 0;
+            }
+            
+            .admin-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-dashboard">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-logo">
+                <i class="fa-solid fa-screwdriver-wrench" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                <h2>T.I.T.E Admin</h2>
+            </div>
+            <nav>
+                <ul class="admin-nav">
+                    <li><a href="#dashboard" class="nav-link active" onclick="showSection('dashboard')">
+                        <i class="fa-solid fa-chart-line"></i> Dashboard
+                    </a></li>
+                    <li><a href="#tickets" class="nav-link" onclick="showSection('tickets')">
+                        <i class="fa-solid fa-ticket"></i> Tickets
+                    </a></li>
+                    <li><a href="#services" class="nav-link" onclick="showSection('services')">
+                        <i class="fa-solid fa-cogs"></i> Services
+                    </a></li>
+                    <li><a href="#technicians" class="nav-link" onclick="showSection('technicians')">
+                        <i class="fa-solid fa-users"></i> Technicians
+                    </a></li>
+                    <li><a href="#availability" class="nav-link" onclick="showSection('availability')">
+                        <i class="fa-solid fa-calendar"></i> Availability
+                    </a></li>
+                    <li><a href="#users" class="nav-link" onclick="showSection('users')">
+                        <i class="fa-solid fa-user-gear"></i> Users
+                    </a></li>
+                    <li><a href="#messages" class="nav-link" onclick="showSection('messages')">
+                        <i class="fa-solid fa-envelope"></i> Messages
+                    </a></li>
+                    <li><a href="#settings" class="nav-link" onclick="showSection('settings')">
+                        <i class="fa-solid fa-gear"></i> Settings
+                    </a></li>
+                    <li><a href="index.html" class="nav-link">
+                        <i class="fa-solid fa-arrow-left"></i> Back to Site
+                    </a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <div>
+                    <h1 id="pageTitle">Admin Dashboard</h1>
+                    <p id="pageSubtitle">Manage your T.I.T.E Solutions</p>
+                </div>
+                <div class="btn-group">
+                    <a href="index.html" class="btn btn-outline" style="text-decoration: none;">
+                        <i class="fa-solid fa-arrow-left"></i> Back to Main Page
+                    </a>
+                    <button class="btn btn-outline" onclick="refreshData()">
+                        <i class="fa-solid fa-refresh"></i> Refresh
+                    </button>
+                    <button class="btn btn-danger" onclick="logout()">
+                        <i class="fa-solid fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="admin-section active">
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <i class="fa-solid fa-ticket"></i>
+                        <h3 id="totalTickets">0</h3>
+                        <p>Total Tickets</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fa-solid fa-clock"></i>
+                        <h3 id="pendingTickets">0</h3>
+                        <p>Pending Tickets</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fa-solid fa-users"></i>
+                        <h3 id="totalUsers">0</h3>
+                        <p>Total Users</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fa-solid fa-cogs"></i>
+                        <h3 id="totalServices">0</h3>
+                        <p>Active Services</p>
+                    </div>
+                </div>
+
+                <div class="admin-content">
+                    <h2>Recent Activity</h2>
+                    <div id="recentActivity">
+                        <p>Loading recent activity...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tickets Section -->
+            <section id="tickets-section" class="admin-section">
+                <div class="admin-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h2>Ticket Management</h2>
+                        <button class="btn btn-primary" onclick="exportTickets()">
+                            <i class="fa-solid fa-download"></i> Export
+                        </button>
+                    </div>
+                    
+                    <div class="admin-tabs">
+                        <button class="admin-tab active" onclick="showTicketTab('all')">All Tickets</button>
+                        <button class="admin-tab" onclick="showTicketTab('pending')">Pending</button>
+                        <button class="admin-tab" onclick="showTicketTab('confirmed')">Confirmed</button>
+                        <button class="admin-tab" onclick="showTicketTab('completed')">Completed</button>
+                    </div>
+                    
+                    <div id="ticketsList">
+                        <p>Loading tickets...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services Section -->
+            <section id="services-section" class="admin-section">
+                <div class="admin-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h2>Service Management</h2>
+                        <button class="btn btn-primary" onclick="openServiceModal()">
+                            <i class="fa-solid fa-plus"></i> Add Service
+                        </button>
+                    </div>
+                    
+                    <div id="servicesList">
+                        <p>Loading services...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Technicians Section -->
+            <section id="technicians-section" class="admin-section">
+                <div class="admin-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h2>Technician Management</h2>
+                        <button class="btn btn-primary" onclick="openTechnicianModal()">
+                            <i class="fa-solid fa-plus"></i> Add Technician
+                        </button>
+                    </div>
+                    
+                    <div id="techniciansList">
+                        <p>Loading technicians...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Availability Section -->
+            <section id="availability-section" class="admin-section">
+                <div class="admin-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h2>Availability Management</h2>
+                        <button class="btn btn-primary" onclick="openAvailabilityModal()">
+                            <i class="fa-solid fa-plus"></i> Set Availability
+                        </button>
+                    </div>
+                    
+                    <div id="availabilityList">
+                        <p>Loading availability...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Users Section -->
+            <section id="users-section" class="admin-section">
+                <div class="admin-content">
+                    <h2>User Management</h2>
+                    <div id="usersList">
+                        <p>Loading users...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Messages Section -->
+            <section id="messages-section" class="admin-section">
+                <div class="admin-content">
+                    <h2>Contact Messages</h2>
+                    <div id="messagesList">
+                        <p>Loading messages...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="admin-section">
+                <div class="admin-content">
+                    <h2>System Settings</h2>
+                    <form id="settingsForm">
+                        <div class="form-group">
+                            <label for="siteName">Site Name</label>
+                            <input type="text" id="siteName" value="T.I.T.E Solutions">
+                        </div>
+                        <div class="form-group">
+                            <label for="siteEmail">Contact Email</label>
+                            <input type="email" id="siteEmail" value="contact@tite.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="sitePhone">Contact Phone</label>
+                            <input type="tel" id="sitePhone" value="+63 912 345 6789">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Service Modal -->
+    <div id="serviceModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('serviceModal')">&times;</button>
+            <h2 id="serviceModalTitle">Add Service</h2>
+            <form id="serviceForm">
+                <div class="form-group">
+                    <label for="serviceName">Service Name *</label>
+                    <input type="text" id="serviceName" required>
+                </div>
+                <div class="form-group">
+                    <label for="serviceDescription">Description *</label>
+                    <textarea id="serviceDescription" rows="3" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="servicePrice">Base Price *</label>
+                        <input type="number" id="servicePrice" min="0" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceDuration">Duration (minutes) *</label>
+                        <input type="number" id="serviceDuration" min="15" step="15" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="serviceCategory">Category *</label>
+                    <select id="serviceCategory" required>
+                        <option value="">Select category</option>
+                        <option value="repair">Repair</option>
+                        <option value="network">Network</option>
+                        <option value="upgrade">Upgrade</option>
+                        <option value="recovery">Recovery</option>
+                        <option value="software">Software</option>
+                        <option value="maintenance">Maintenance</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="serviceIcon">Icon</label>
+                    <select id="serviceIcon">
+                        <option value="fa-laptop">Laptop</option>
+                        <option value="fa-wifi">WiFi</option>
+                        <option value="fa-microchip">Microchip</option>
+                        <option value="fa-database">Database</option>
+                        <option value="fa-download">Download</option>
+                        <option value="fa-tools">Tools</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Service</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Technician Modal -->
+    <div id="technicianModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('technicianModal')">&times;</button>
+            <h2 id="technicianModalTitle">Add Technician</h2>
+            <form id="technicianForm">
+                <div class="form-group">
+                    <label for="technicianName">Name *</label>
+                    <input type="text" id="technicianName" required>
+                </div>
+                <div class="form-group">
+                    <label for="technicianEmail">Email *</label>
+                    <input type="email" id="technicianEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="technicianPhone">Phone *</label>
+                    <input type="tel" id="technicianPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="technicianSpecialties">Specialties *</label>
+                    <div id="specialtyCheckboxes">
+                        <!-- Will be populated dynamically -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="technicianPassword">Password *</label>
+                    <input type="password" id="technicianPassword" required minlength="8" placeholder="Min 8 characters">
+                </div>
+                <div class="form-group">
+                    <label for="technicianAvatar">Avatar</label>
+                    <div class="avatar-upload">
+                        <img id="avatarPreview" class="avatar-preview" alt="Avatar preview">
+                        <input type="file" id="technicianAvatar" accept="image/*" onchange="previewAvatar(this)">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Technician</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/database.js"></script>
+    <script>
+        // Global variables
+        let currentSection = 'dashboard';
+        let currentTicketTab = 'all';
+        let services = [];
+        let technicians = [];
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', async function() {
+            await checkAuth();
+            await loadDashboardData();
+            setupEventListeners();
+        });
+
+        // Check authentication
+        async function checkAuth() {
+            try {
+                const result = await db.auth.checkSession();
+                if (!result.success || !db.auth.isAdmin()) {
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Service form
+            document.getElementById('serviceForm').addEventListener('submit', handleServiceSubmit);
+            
+            // Technician form
+            document.getElementById('technicianForm').addEventListener('submit', handleTechnicianSubmit);
+            
+            // Settings form
+            document.getElementById('settingsForm').addEventListener('submit', handleSettingsSubmit);
+        }
+
+        // Show section
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(`${section}-section`).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelector(`[href="#${section}"]`).classList.add('active');
+            
+            // Update page title
+            updatePageTitle(section);
+            
+            // Load section data
+            loadSectionData(section);
+            
+            currentSection = section;
+        }
+
+        // Update page title
+        function updatePageTitle(section) {
+            const titles = {
+                dashboard: { title: 'Admin Dashboard', subtitle: 'Manage your T.I.T.E Solutions' },
+                tickets: { title: 'Ticket Management', subtitle: 'View and manage service tickets' },
+                services: { title: 'Service Management', subtitle: 'Manage your service offerings' },
+                technicians: { title: 'Technician Management', subtitle: 'Manage your technical team' },
+                availability: { title: 'Availability Management', subtitle: 'Set technician availability' },
+                users: { title: 'User Management', subtitle: 'Manage user accounts' },
+                messages: { title: 'Contact Messages', subtitle: 'View customer inquiries' },
+                settings: { title: 'System Settings', subtitle: 'Configure system preferences' }
+            };
+            
+            const pageData = titles[section] || titles.dashboard;
+            document.getElementById('pageTitle').textContent = pageData.title;
+            document.getElementById('pageSubtitle').textContent = pageData.subtitle;
+        }
+
+        // Load section data
+        async function loadSectionData(section) {
+            switch (section) {
+                case 'dashboard':
+                    await loadDashboardData();
+                    break;
+                case 'tickets':
+                    await loadTickets();
+                    break;
+                case 'services':
+                    await loadServices();
+                    break;
+                case 'technicians':
+                    await loadTechnicians();
+                    break;
+                case 'availability':
+                    await loadAvailability();
+                    break;
+                case 'users':
+                    await loadUsers();
+                    break;
+                case 'messages':
+                    await loadMessages();
+                    break;
+            }
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                // Load statistics
+                const [ticketsResult, servicesResult] = await Promise.all([
+                    db.tickets.getAll('all'),
+                    db.services.getAll(true)
+                ]);
+                
+                if (ticketsResult.success) {
+                    document.getElementById('totalTickets').textContent = ticketsResult.data.length;
+                    document.getElementById('pendingTickets').textContent = 
+                        ticketsResult.data.filter(t => t.status === 'pending').length;
+                }
+                
+                if (servicesResult.success) {
+                    document.getElementById('totalServices').textContent = servicesResult.data.length;
+                    services = servicesResult.data;
+                }
+                
+                // Load recent activity
+                await loadRecentActivity();
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+
+        // Load recent activity
+        async function loadRecentActivity() {
+            const container = document.getElementById('recentActivity');
+            try {
+                const result = await db.tickets.getAll('all');
+                if (result.success && result.data.length > 0) {
+                    const recentTickets = result.data.slice(0, 5);
+                    container.innerHTML = `
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticket ID</th>
+                                    <th>Service</th>
+                                    <th>Customer</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${recentTickets.map(ticket => `
+                                    <tr>
+                                        <td>${ticket.id}</td>
+                                        <td>${ticket.service}</td>
+                                        <td>${ticket.firstName} ${ticket.lastName}</td>
+                                        <td><span class="status-badge status-${ticket.status}">${ticket.status}</span></td>
+                                        <td>${new Date(ticket.created_at).toLocaleDateString()}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                } else {
+                    container.innerHTML = '<p>No recent activity found.</p>';
+                }
+            } catch (error) {
+                container.innerHTML = '<p>Error loading recent activity.</p>';
+            }
+        }
+
+        // Load tickets
+        async function loadTickets() {
+            const container = document.getElementById('ticketsList');
+            container.innerHTML = '<p>Loading tickets...</p>';
+            
+            try {
+                const result = await db.tickets.getAll(currentTicketTab);
+                if (result.success) {
+                    renderTickets(result.data);
+                } else {
+                    throw new Error(result.error || 'Failed to load tickets');
+                }
+            } catch (error) {
+                container.innerHTML = `<p>Error loading tickets: ${error.message}</p>`;
+            }
+        }
+
+        // Render tickets
+        function renderTickets(tickets) {
+            const container = document.getElementById('ticketsList');
+            
+            if (tickets.length === 0) {
+                container.innerHTML = '<p>No tickets found.</p>';
+                return;
+            }
+            
+            container.innerHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer</th>
+                            <th>Service</th>
+                            <th>Date/Time</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tickets.map(ticket => `
+                            <tr>
+                                <td>${ticket.id}</td>
+                                <td>${ticket.firstName} ${ticket.lastName}</td>
+                                <td>${ticket.service}</td>
+                                <td>${ticket.date} ${ticket.time}</td>
+                                <td><span class="status-badge status-${ticket.status}">${ticket.status}</span></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-primary" onclick="updateTicketStatus('${ticket.id}', 'confirmed')">Confirm</button>
+                                        <button class="btn btn-sm btn-success" onclick="updateTicketStatus('${ticket.id}', 'completed')">Complete</button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteTicket('${ticket.id}')">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // Show ticket tab
+        function showTicketTab(tab) {
+            currentTicketTab = tab;
+            
+            // Update tab buttons
+            document.querySelectorAll('.admin-tab').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Reload tickets
+            loadTickets();
+        }
+
+        // Load services
+        async function loadServices() {
+            const container = document.getElementById('servicesList');
+            container.innerHTML = '<p>Loading services...</p>';
+            
+            try {
+                const result = await db.services.getAll(false);
+                if (result.success) {
+                    services = result.data;
+                    renderServices(result.data);
+                } else {
+                    throw new Error(result.error || 'Failed to load services');
+                }
+            } catch (error) {
+                container.innerHTML = `<p>Error loading services: ${error.message}</p>`;
+            }
+        }
+
+        // Render services
+        function renderServices(services) {
+            const container = document.getElementById('servicesList');
+            
+            if (services.length === 0) {
+                container.innerHTML = '<p>No services found.</p>';
+                return;
+            }
+            
+            container.innerHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Duration</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${services.map(service => `
+                            <tr>
+                                <td>${service.name}</td>
+                                <td>${service.category}</td>
+                                <td>₱${service.base_price}</td>
+                                <td>${service.duration_minutes} min</td>
+                                <td><span class="status-badge ${service.is_active ? 'status-confirmed' : 'status-pending'}">${service.is_active ? 'Active' : 'Inactive'}</span></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm" onclick="editService(${service.id})">Edit</button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteService(${service.id})">${service.is_active ? 'Deactivate' : 'Activate'}</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // Load technicians
+        async function loadTechnicians() {
+            const container = document.getElementById('techniciansList');
+            container.innerHTML = '<p>Loading technicians...</p>';
+            
+            try {
+                const result = await db.technicians.getAll({ active: false });
+                if (result.success) {
+                    technicians = result.data;
+                    renderTechnicians(result.data);
+                } else {
+                    throw new Error(result.error || 'Failed to load technicians');
+                }
+            } catch (error) {
+                container.innerHTML = `<p>Error loading technicians: ${error.message}</p>`;
+            }
+        }
+
+        // Render technicians
+        function renderTechnicians(technicians) {
+            const container = document.getElementById('techniciansList');
+            
+            if (technicians.length === 0) {
+                container.innerHTML = '<p>No technicians found.</p>';
+                return;
+            }
+            
+            container.innerHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Specialties</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${technicians.map(technician => `
+                            <tr>
+                                <td>${technician.name}</td>
+                                <td>${technician.email}</td>
+                                <td>${technician.phone}</td>
+                                <td>${Array.isArray(technician.specialties) ? technician.specialties.join(', ') : 'N/A'}</td>
+                                <td><span class="status-badge ${technician.is_active ? 'status-confirmed' : 'status-pending'}">${technician.is_active ? 'Active' : 'Inactive'}</span></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm" onclick="editTechnician(${technician.id})">Edit</button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteTechnician(${technician.id})">${technician.is_active ? 'Deactivate' : 'Activate'}</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // Load availability
+        async function loadAvailability() {
+            const container = document.getElementById('availabilityList');
+            container.innerHTML = '<p>Loading availability...</p>';
+            
+            try {
+                const result = await db.availability.getAll();
+                if (result.success) {
+                    renderAvailability(result.data);
+                } else {
+                    throw new Error(result.error || 'Failed to load availability');
+                }
+            } catch (error) {
+                container.innerHTML = `<p>Error loading availability: ${error.message}</p>`;
+            }
+        }
+
+        // Render availability
+        function renderAvailability(availability) {
+            const container = document.getElementById('availabilityList');
+            
+            if (availability.length === 0) {
+                container.innerHTML = '<p>No availability data found.</p>';
+                return;
+            }
+            
+            container.innerHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Technician</th>
+                            <th>Date</th>
+                            <th>Time Slot</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${availability.map(avail => `
+                            <tr>
+                                <td>${avail.technician_name}</td>
+                                <td>${avail.date}</td>
+                                <td>${avail.time_slot}</td>
+                                <td><span class="status-badge ${avail.is_available ? 'status-confirmed' : 'status-pending'}">${avail.is_available ? 'Available' : 'Unavailable'}</span></td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="toggleAvailability(${avail.id})">${avail.is_available ? 'Mark Unavailable' : 'Mark Available'}</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // Load users
+        async function loadUsers() {
+            const container = document.getElementById('usersList');
+            container.innerHTML = '<p>User management requires additional API endpoint.</p>';
+        }
+
+        // Load messages
+        async function loadMessages() {
+            const container = document.getElementById('messagesList');
+            container.innerHTML = '<p>Loading messages...</p>';
+            
+            try {
+                const result = await db.messages.getAll('contact');
+                if (result.success) {
+                    renderMessages(result.data);
+                } else {
+                    throw new Error(result.error || 'Failed to load messages');
+                }
+            } catch (error) {
+                container.innerHTML = `<p>Error loading messages: ${error.message}</p>`;
+            }
+        }
+
+        // Render messages
+        function renderMessages(messages) {
+            const container = document.getElementById('messagesList');
+            
+            if (messages.length === 0) {
+                container.innerHTML = '<p>No messages found.</p>';
+                return;
+            }
+            
+            container.innerHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Message</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${messages.map(msg => `
+                            <tr>
+                                <td>${msg.name}</td>
+                                <td>${msg.email}</td>
+                                <td>${msg.message.substring(0, 100)}${msg.message.length > 100 ? '...' : ''}</td>
+                                <td>${new Date(msg.timestamp).toLocaleDateString()}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteMessage(${msg.id})">Delete</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // Modal functions
+        function openServiceModal(serviceId = null) {
+            const modal = document.getElementById('serviceModal');
+            const title = document.getElementById('serviceModalTitle');
+            
+            if (serviceId) {
+                title.textContent = 'Edit Service';
+                // Load service data into form
+                const service = services.find(s => s.id === serviceId);
+                if (service) {
+                    document.getElementById('serviceName').value = service.name;
+                    document.getElementById('serviceDescription').value = service.description;
+                    document.getElementById('servicePrice').value = service.base_price;
+                    document.getElementById('serviceDuration').value = service.duration_minutes;
+                    document.getElementById('serviceCategory').value = service.category;
+                    document.getElementById('serviceIcon').value = service.icon;
+                }
+            } else {
+                title.textContent = 'Add Service';
+                document.getElementById('serviceForm').reset();
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function openTechnicianModal(technicianId = null) {
+            const modal = document.getElementById('technicianModal');
+            const title = document.getElementById('technicianModalTitle');
+            
+            // Populate specialty checkboxes
+            const specialtyContainer = document.getElementById('specialtyCheckboxes');
+            if (services.length > 0) {
+                specialtyContainer.innerHTML = services.map(service => `
+                    <label>
+                        <input type="checkbox" name="specialties" value="${service.name}"> 
+                        <span>${service.name}</span>
+                    </label>
+                `).join('');
+            }
+            
+            if (technicianId) {
+                title.textContent = 'Edit Technician';
+                // Load technician data into form
+                const technician = technicians.find(t => t.id === technicianId);
+                if (technician) {
+                    document.getElementById('technicianName').value = technician.name;
+                    document.getElementById('technicianEmail').value = technician.email;
+                    document.getElementById('technicianPhone').value = technician.phone;
+                    // Password is optional for edit
+                    document.getElementById('technicianPassword').required = false;
+                    document.getElementById('technicianPassword').placeholder = 'Leave blank to keep current';
+                    
+                    // Show avatar preview if exists
+                    const avatarPreview = document.getElementById('avatarPreview');
+                    if (technician.avatar_url) {
+                        avatarPreview.src = technician.avatar_url;
+                        avatarPreview.classList.add('show');
+                    } else {
+                        avatarPreview.classList.remove('show');
+                    }
+                    
+                    // Check specialties
+                    const specialties = Array.isArray(technician.specialties) ? technician.specialties : [];
+                    document.querySelectorAll('input[name="specialties"]').forEach(checkbox => {
+                        checkbox.checked = specialties.includes(checkbox.value);
+                    });
+                }
+            } else {
+                title.textContent = 'Add Technician';
+                document.getElementById('technicianForm').reset();
+                document.getElementById('technicianPassword').required = true;
+                document.getElementById('technicianPassword').placeholder = 'Min 8 characters';
+                document.getElementById('avatarPreview').classList.remove('show');
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Form handlers
+        async function handleServiceSubmit(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('serviceName').value,
+                description: document.getElementById('serviceDescription').value,
+                base_price: parseFloat(document.getElementById('servicePrice').value),
+                duration_minutes: parseInt(document.getElementById('serviceDuration').value),
+                category: document.getElementById('serviceCategory').value,
+                icon: document.getElementById('serviceIcon').value,
+                is_active: true
+            };
+            
+            try {
+                const result = await db.services.create(formData);
+                if (result.success) {
+                    alert('Service created successfully!');
+                    closeModal('serviceModal');
+                    loadServices();
+                } else {
+                    throw new Error(result.error || 'Failed to create service');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function handleTechnicianSubmit(e) {
+            e.preventDefault();
+            
+            const specialties = Array.from(document.querySelectorAll('input[name="specialties"]:checked'))
+                .map(cb => cb.value);
+            
+            const password = document.getElementById('technicianPassword').value;
+            if (password.length < 8) {
+                alert('Password must be at least 8 characters');
+                return;
+            }
+            
+            const formData = {
+                name: document.getElementById('technicianName').value,
+                email: document.getElementById('technicianEmail').value,
+                password: password,
+                phone: document.getElementById('technicianPhone').value,
+                specialties: specialties,
+                is_active: true
+            };
+            
+            // Handle avatar file upload
+            const avatarFile = document.getElementById('technicianAvatar').files[0];
+            if (avatarFile) {
+                // Convert to base64 for upload
+                const reader = new FileReader();
+                reader.onload = async function(event) {
+                    formData.avatar_base64 = event.target.result;
+                    await submitTechnician(formData);
+                };
+                reader.readAsDataURL(avatarFile);
+            } else {
+                await submitTechnician(formData);
+            }
+        }
+        
+        async function submitTechnician(formData) {
+            try {
+                const result = await db.technicians.create(formData);
+                if (result.success) {
+                    alert('Technician created successfully!');
+                    closeModal('technicianModal');
+                    loadTechnicians();
+                } else {
+                    throw new Error(result.error || 'Failed to create technician');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        function previewAvatar(input) {
+            const preview = document.getElementById('avatarPreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.add('show');
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.classList.remove('show');
+            }
+        }
+        
+
+        function handleSettingsSubmit(e) {
+            e.preventDefault();
+            alert('Settings saved successfully!');
+        }
+
+        // Action functions
+        async function updateTicketStatus(id, status) {
+            try {
+                const result = await db.tickets.update(id, { status });
+                if (result.success) {
+                    alert('Ticket updated successfully!');
+                    loadTickets();
+                } else {
+                    throw new Error(result.error || 'Failed to update ticket');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function deleteTicket(id) {
+            if (!confirm('Are you sure you want to delete this ticket?')) return;
+            
+            try {
+                const result = await db.tickets.delete(id);
+                if (result.success) {
+                    alert('Ticket deleted successfully!');
+                    loadTickets();
+                } else {
+                    throw new Error(result.error || 'Failed to delete ticket');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function deleteService(id) {
+            if (!confirm('Are you sure you want to delete this service?')) return;
+            
+            try {
+                const result = await db.services.delete(id);
+                if (result.success) {
+                    alert('Service deleted successfully!');
+                    loadServices();
+                } else {
+                    throw new Error(result.error || 'Failed to delete service');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function deleteTechnician(id) {
+            if (!confirm('Are you sure you want to delete this technician?')) return;
+            
+            try {
+                const result = await db.technicians.delete(id);
+                if (result.success) {
+                    alert('Technician deleted successfully!');
+                    loadTechnicians();
+                } else {
+                    throw new Error(result.error || 'Failed to delete technician');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function toggleAvailability(id) {
+            try {
+                // This would need to be implemented in the API
+                alert('Toggle availability functionality would be implemented here');
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function deleteMessage(id) {
+            if (!confirm('Are you sure you want to delete this message?')) return;
+            
+            try {
+                const result = await db.messages.delete(id, 'contact');
+                if (result.success) {
+                    alert('Message deleted successfully!');
+                    loadMessages();
+                } else {
+                    throw new Error(result.error || 'Failed to delete message');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function refreshData() {
+            await loadSectionData(currentSection);
+        }
+
+        async function logout() {
+            try {
+                await db.auth.logout();
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Export functions
+        function exportTickets() {
+            alert('Export functionality would be implemented here');
+        }
+
+        // Expose functions to global scope
+        window.showSection = showSection;
+        window.showTicketTab = showTicketTab;
+        window.openServiceModal = openServiceModal;
+        window.openTechnicianModal = openTechnicianModal;
+        window.editTechnician = openTechnicianModal;
+        window.closeModal = closeModal;
+        window.previewAvatar = previewAvatar;
+        window.updateTicketStatus = updateTicketStatus;
+        window.deleteTicket = deleteTicket;
+        window.deleteService = deleteService;
+        window.deleteTechnician = deleteTechnician;
+        window.deleteMessage = deleteMessage;
+        window.refreshData = refreshData;
+        window.logout = logout;
+        window.exportTickets = exportTickets;
+    </script>
+</body>
+</html>

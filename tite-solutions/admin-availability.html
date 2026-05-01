@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Availability | Admin | T.I.T.E Solutions</title>
+    
+    <link rel="stylesheet" href="css/stylesheet.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .admin-dashboard { display: flex; min-height: 100vh; background: #f8f9fa; }
+        .admin-sidebar { width: 250px; background: var(--primary-color); color: white; padding: 2rem 0; position: fixed; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; }
+        .admin-logo { text-align: center; padding: 0 1rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.2); margin-bottom: 2rem; }
+        .admin-logo h2 { margin: 0; font-size: 1.5rem; }
+        .admin-nav { list-style: none; padding: 0; margin: 0; flex: 1; display: flex; flex-direction: column; }
+        .admin-sidebar nav { flex: 1; display: flex; }
+        .admin-nav li.nav-bottom { margin-top: auto; }
+        .admin-nav li { margin-bottom: 0.5rem; }
+        .admin-nav a { display: block; padding: 1rem 1.5rem; color: white; text-decoration: none; transition: background 0.3s; border-left: 3px solid transparent; }
+        .admin-nav a:hover, .admin-nav a.active { background: rgba(255,255,255,0.1); border-left-color: white; }
+        .admin-nav i { width: 20px; margin-right: 10px; }
+        .admin-main { flex: 1; margin-left: 250px; padding: 2rem; }
+        .admin-header { background: white; padding: 1.5rem 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .admin-header h1 { margin: 0; color: var(--secondary-color); font-size: 1.75rem; }
+        .admin-content { background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .btn-group { display: flex; gap: 0.5rem; }
+        .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .btn-primary { background: var(--primary-color); color: white; }
+        .btn-sm { padding: 0.5rem 1rem; font-size: 0.875rem; }
+        .logout-btn {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logout-btn:hover { background: var(--primary-color); color: white; }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(40px, 1fr));
+            gap: 0.35rem;
+            margin: 0 auto 1rem;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            min-width: 40px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 0.35rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+        .calendar-day:hover { background: #f3f4f6; }
+
+        /* Desktop: constrain calendar and use fixed-size cells to avoid oversized grid */
+        @media (min-width: 992px) {
+            .calendar-grid {
+                width: auto;
+                max-width: 560px;
+                grid-template-columns: repeat(7, 64px);
+                justify-content: center;
+                overflow: visible;
+            }
+            .calendar-day {
+                min-width: 64px;
+                font-size: 0.9rem;
+            }
+        }
+        .calendar-day.selected { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+        .calendar-day.past { background: #f9fafb; color: #9ca3af; cursor: not-allowed; }
+        .calendar-day.unavailable { background: #fee2e2; border-color: #fecaca; color: #991b1b; }
+        .calendar-day.unavailable.selected { background: #dc3545; color: white; border-color: #dc3545; }
+        .calendar-day.partial { background: #fef3c7; border-color: #fde68a; color: #92400e; }
+        .calendar-day.partial.selected { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+        .time-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 0.5rem; }
+        .time-slot { padding: 0.5rem 1rem; border: 1px solid #e5e7eb; border-radius: 5px; cursor: pointer; text-align: center; }
+        .time-slot:hover { background: #f3f4f6; }
+        .time-slot.selected { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+        .admin-sidebar-toggle {
+            display: none; position: fixed; top: 1rem; left: 1rem; z-index: 1100;
+            background: var(--primary-color); color: white; border: none;
+            width: 44px; height: 44px; border-radius: 8px; font-size: 1.25rem;
+            cursor: pointer; align-items: center; justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .admin-sidebar-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 1040;
+        }
+        .admin-sidebar-overlay.active { display: block; }
+        @media (max-width: 768px) {
+            .admin-sidebar-toggle { display: flex; }
+            .admin-sidebar { transform: translateX(-100%); transition: transform 0.3s; z-index: 1050; }
+            .admin-sidebar.open { transform: translateX(0); }
+            .admin-main { margin-left: 0; padding: 1rem; padding-top: 4rem; overflow-x: hidden; }
+            .admin-header { padding: 1rem 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-dashboard">
+        <button class="admin-sidebar-toggle" id="adminSidebarToggle" aria-label="Toggle sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="admin-sidebar-overlay" id="adminSidebarOverlay"></div>
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-logo">
+                <i class="fa-solid fa-screwdriver-wrench" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                <h2>T.I.T.E Admin</h2>
+            </div>
+            <nav>
+                <ul class="admin-nav">
+                    <li><a href="admin-dashboard.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+                    <li><a href="admin-tickets.html"><i class="fa-solid fa-ticket"></i> Tickets</a></li>
+                    <li><a href="admin-services.html"><i class="fa-solid fa-cogs"></i> Services</a></li>
+                    <li><a href="admin-technicians.html"><i class="fa-solid fa-users"></i> Technicians</a></li>
+                    <li><a href="admin-availability.html" class="active"><i class="fa-solid fa-calendar"></i> Availability</a></li>
+                    <li><a href="admin-users.html"><i class="fa-solid fa-user"></i> Users</a></li>
+                    <li><a href="admin-messages.html"><i class="fa-solid fa-envelope"></i> Messages</a></li>
+                    <li><a href="admin-settings.html"><i class="fa-solid fa-cog"></i> Settings</a></li>
+                    <li class="nav-bottom"><a href="index.html"><i class="fa-solid fa-arrow-left"></i> Back to Main Page</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-header">
+                <div>
+                    <h1>Availability Management</h1>
+                    <p>Manage schedule availability</p>
+                </div>
+                <div></div>
+            </div>
+
+            <div class="admin-content">
+                <h3 style="margin-bottom: 1rem;">Select Date</h3>
+                <div class="calendar-grid" id="calendar">
+                    <!-- Calendar will be populated -->
+                </div>
+
+                <h3 style="margin-bottom: 1rem;">Available Time Slots</h3>
+                <div class="time-slots" id="timeSlots">
+                    <div class="time-slot">09:00 AM</div>
+                    <div class="time-slot">11:00 AM</div>
+                    <div class="time-slot">02:00 PM</div>
+                    <div class="time-slot">04:00 PM</div>
+                </div>
+
+                <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="makeAvailable()">
+                        <i class="fa-solid fa-check"></i> Make Available
+                    </button>
+                    <button class="btn" style="background: #dc3545; color: white;" onclick="markDaysUnavailable()">
+                        <i class="fa-solid fa-ban"></i> Mark as Unavailable
+                    </button>
+                    <button class="btn btn-outline" style="border-color: #6b7280; color: #6b7280;" onclick="clearAllGlobalAvailability()">
+                        <i class="fa-solid fa-trash"></i> Clear All Global
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/database.js?v=2"></script>
+    <script>
+        let selectedDates = new Set();
+        let selectedSlots = [];
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth();
+
+        async function initCalendar() {
+            const calendar = document.getElementById('calendar');
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+
+            const today = new Date();
+            const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+            // Fetch unavailability data for the current month
+            let unavailabilityByDate = {};
+            try {
+                const result = await db.availability.getAll();
+                console.log('[admin-availability] API raw:', result);
+                if (result.success) {
+                    const allTimeSlots = ['09:00 AM', '11:00 AM', '02:00 PM', '04:00 PM'];
+                    result.data.forEach(avail => {
+                        // Only count GLOBAL entries where is_available = 0 (unavailable)
+                        // Technician-specific entries are managed in the technician portal
+                        if (avail.is_available === false && (avail.technician_id === 0 || avail.technician_id === null)) {
+                            if (!unavailabilityByDate[avail.date]) {
+                                unavailabilityByDate[avail.date] = new Set();
+                            }
+                            unavailabilityByDate[avail.date].add(avail.time_slot);
+                        }
+                    });
+                }
+                console.log('[admin-availability] grouped unavailability:', Object.fromEntries(
+                    Object.entries(unavailabilityByDate).map(([k, v]) => [k, [...v]])
+                ));
+            } catch (error) {
+                console.error('Error loading unavailability:', error);
+            }
+
+            let html = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; grid-column: 1 / -1;">
+                    <button class="btn btn-sm" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                    <h3 style="margin: 0;">${monthNames[currentMonth]} ${currentYear}</h3>
+                    <button class="btn btn-sm" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            `;
+
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayNames.forEach(day => {
+                html += `<div style="text-align: center; font-weight: 600; padding: 0.5rem;">${day}</div>`;
+            });
+
+            for (let i = 0; i < firstDay; i++) {
+                html += '<div></div>';
+            }
+
+            const allTimeSlots = ['09:00 AM', '11:00 AM', '02:00 PM', '04:00 PM'];
+
+            const renderedMap = [];
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = formatDate(day);
+                let classes = 'calendar-day';
+                let onclick = `onclick="toggleDate(this, '${dateStr}')"`;
+                
+                // Check if this is a past date
+                if (dateStr < todayStr) {
+                    classes += ' past';
+                    onclick = '';
+                }
+                
+                // Check unavailability status for this date
+                const unavailableSlots = unavailabilityByDate[dateStr];
+                const isFullyUnavailable = unavailableSlots && unavailableSlots.size === allTimeSlots.length;
+                const isPartiallyUnavailable = unavailableSlots && unavailableSlots.size > 0 && unavailableSlots.size < allTimeSlots.length;
+                let titleAttr = '';
+                if (isFullyUnavailable) {
+                    classes += ' unavailable';
+                    titleAttr = ' title="Fully unavailable"';
+                } else if (isPartiallyUnavailable) {
+                    classes += ' partial';
+                    const slotsStr = [...unavailableSlots].join(', ');
+                    titleAttr = ` title="Unavailable: ${slotsStr}"`;
+                }
+
+                // Check if this date is selected
+                if (selectedDates.has(dateStr)) {
+                    classes += ' selected';
+                }
+
+                const hasUnavail = classes.includes('unavailable') || classes.includes('partial');
+                if (hasUnavail) renderedMap.push({ day, dateStr, classes });
+
+                // Always show date in title for debugging
+                const debugTitle = titleAttr || ` title="${dateStr}"`;
+                html += `<div class="${classes}" data-date="${dateStr}" ${onclick}${debugTitle}>${day}</div>`;
+            }
+            console.log('[initCalendar] unavailable/partial days:', renderedMap);
+
+            calendar.innerHTML = html;
+        }
+
+        function changeMonth(delta) {
+            currentMonth += delta;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            initCalendar();
+        }
+
+        function formatDate(day) {
+            const month = String(currentMonth + 1).padStart(2, '0');
+            const dayStr = String(day).padStart(2, '0');
+            return `${currentYear}-${month}-${dayStr}`;
+        }
+
+        function toggleDate(element, dateStr) {
+            console.log('[toggleDate] toggling date:', dateStr, 'element text:', element.textContent, 'currently selected:', selectedDates.has(dateStr));
+            if (selectedDates.has(dateStr)) {
+                selectedDates.delete(dateStr);
+                element.classList.remove('selected');
+            } else {
+                selectedDates.add(dateStr);
+                element.classList.add('selected');
+            }
+            console.log('[toggleDate] selectedDates now:', [...selectedDates]);
+        }
+
+        document.getElementById('timeSlots').addEventListener('click', function(e) {
+            if (e.target.classList.contains('time-slot')) {
+                e.target.classList.toggle('selected');
+                const time = e.target.textContent;
+                if (e.target.classList.contains('selected')) {
+                    selectedSlots.push(time);
+                } else {
+                    selectedSlots = selectedSlots.filter(t => t !== time);
+                }
+            }
+        });
+
+        // Sidebar toggle for mobile (admin pages)
+        (function() {
+            const sidebarToggle = document.getElementById('adminSidebarToggle');
+            const sidebarOverlay = document.getElementById('adminSidebarOverlay');
+            const sidebar = document.getElementById('adminSidebar');
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', () => {
+                    if (sidebar) sidebar.classList.toggle('open');
+                    if (sidebarOverlay) sidebarOverlay.classList.toggle('active');
+                });
+            }
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', () => {
+                    if (sidebar) sidebar.classList.remove('open');
+                    sidebarOverlay.classList.remove('active');
+                });
+            }
+        })();
+
+        async function makeAvailable() {
+            if (selectedDates.size === 0) {
+                alert('Please select at least one date');
+                return;
+            }
+
+            const slotsToRestore = selectedSlots.length > 0 ? selectedSlots : ['09:00 AM', '11:00 AM', '02:00 PM', '04:00 PM'];
+
+            try {
+                for (const date of selectedDates) {
+                    const existingResult = await db.availability.getAll({ date: date });
+                    if (existingResult.success && existingResult.data.length > 0) {
+                        for (const avail of existingResult.data) {
+                            // Only delete global entries (admin-managed), preserve technician-specific
+                            if ((avail.technician_id === 0 || avail.technician_id === null) && slotsToRestore.includes(avail.time_slot)) {
+                                await db.availability.delete(avail.id);
+                            }
+                        }
+                    }
+                }
+
+                alert('Slots marked as available successfully!');
+                selectedDates.clear();
+                selectedSlots = [];
+                document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                initCalendar();
+            } catch (error) {
+                console.error('Error making dates available:', error);
+                alert('Error making dates available: ' + (error.message || 'Unknown error'));
+            }
+        }
+
+        async function markDaysUnavailable() {
+            if (selectedDates.size === 0) {
+                alert('Please select at least one date');
+                return;
+            }
+
+            const slotsToMark = selectedSlots.length > 0 ? selectedSlots : ['09:00 AM', '11:00 AM', '02:00 PM', '04:00 PM'];
+            const slotLabel = selectedSlots.length > 0 ? `${slotsToMark.join(', ')}` : 'all time slots';
+
+            if (!confirm(`Mark ${selectedDates.size} date(s) as unavailable for ${slotLabel}?`)) {
+                return;
+            }
+
+            console.log('[markDaysUnavailable] marking unavailable for dates:', [...selectedDates], 'slots:', slotsToMark);
+
+            try {
+                for (const date of selectedDates) {
+                    console.log('[markDaysUnavailable] processing date:', date);
+                    // Delete only GLOBAL entries for this date to reset admin-managed availability
+                    const existingResult = await db.availability.getAll({ date: date });
+                    console.log('[markDaysUnavailable] existing entries for', date, ':', existingResult);
+                    if (existingResult.success && existingResult.data.length > 0) {
+                        for (const avail of existingResult.data) {
+                            if (avail.technician_id === 0 || avail.technician_id === null) {
+                                console.log('[markDaysUnavailable] deleting entry id:', avail.id, 'for date:', avail.date);
+                                await db.availability.delete(avail.id);
+                            }
+                        }
+                    }
+
+                    // Create global entries with is_available = 0 to mark as unavailable
+                    for (const slot of slotsToMark) {
+                        console.log('[markDaysUnavailable] creating unavailable entry for date:', date, 'slot:', slot);
+                        await db.availability.create({
+                            date: date,
+                            time_slot: slot,
+                            is_available: 0,
+                            technician_id: 0
+                        });
+                    }
+                }
+
+                alert('Slots marked as unavailable successfully!');
+                selectedDates.clear();
+                selectedSlots = [];
+                document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                initCalendar();
+            } catch (error) {
+                console.error('Error marking days as unavailable:', error);
+                alert('Error marking days as unavailable: ' + (error.message || 'Unknown error'));
+            }
+        }
+
+        async function clearAllGlobalAvailability() {
+            if (!confirm('This will delete ALL global availability entries and reset the calendar. Continue?')) {
+                return;
+            }
+            try {
+                const result = await db.availability.getAll();
+                if (result.success && result.data.length > 0) {
+                    let deleted = 0;
+                    for (const avail of result.data) {
+                        if (avail.technician_id === 0 || avail.technician_id === null) {
+                            await db.availability.delete(avail.id);
+                            deleted++;
+                        }
+                    }
+                    alert(`Cleared ${deleted} global availability entries.`);
+                    selectedDates.clear();
+                    selectedSlots = [];
+                    document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+                    document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                    initCalendar();
+                } else {
+                    alert('No global availability entries to clear.');
+                }
+            } catch (error) {
+                console.error('Error clearing availability:', error);
+                alert('Error clearing availability: ' + (error.message || 'Unknown error'));
+            }
+        }
+
+        async function logout() {
+            try {
+                await db.auth.logout();
+                window.location.href = 'index.html';
+            } catch (error) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const result = await db.auth.checkSession();
+                if (!result.success || !db.auth.isAdmin()) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+            } catch (error) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            initCalendar();
+        });
+
+        window.logout = logout;
+        window.changeMonth = changeMonth;
+        window.makeAvailable = makeAvailable;
+        window.markDaysUnavailable = markDaysUnavailable;
+        window.clearAllGlobalAvailability = clearAllGlobalAvailability;
+    </script>
+</body>
+</html>

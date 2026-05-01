@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Users | Admin | T.I.T.E Solutions</title>
+    
+    <link rel="stylesheet" href="css/stylesheet.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .admin-dashboard { display: flex; min-height: 100vh; background: #f8f9fa; }
+        .admin-sidebar { width: 250px; background: var(--primary-color); color: white; padding: 2rem 0; position: fixed; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; }
+        .admin-logo { text-align: center; padding: 0 1rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.2); margin-bottom: 2rem; }
+        .admin-logo h2 { margin: 0; font-size: 1.5rem; }
+        .admin-nav { list-style: none; padding: 0; margin: 0; flex: 1; display: flex; flex-direction: column; }
+        .admin-sidebar nav { flex: 1; display: flex; }
+        .admin-nav li.nav-bottom { margin-top: auto; }
+        .admin-nav li { margin-bottom: 0.5rem; }
+        .admin-nav a { display: block; padding: 1rem 1.5rem; color: white; text-decoration: none; transition: background 0.3s; border-left: 3px solid transparent; }
+        .admin-nav a:hover, .admin-nav a.active { background: rgba(255,255,255,0.1); border-left-color: white; }
+        .admin-nav i { width: 20px; margin-right: 10px; }
+        .admin-main { flex: 1; margin-left: 250px; padding: 2rem; }
+        .admin-header { background: white; padding: 1.5rem 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .admin-header h1 { margin: 0; color: var(--secondary-color); font-size: 1.75rem; }
+        .admin-content { background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .logout-btn {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logout-btn:hover { background: var(--primary-color); color: white; }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th, .data-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+        .data-table th { background: #f8f9fa; font-weight: 600; color: var(--secondary-color); }
+        .data-table tr:hover { background: #f8f9fa; }
+        .role-badge { padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+        .role-admin { background: #fee2e2; color: #991b1b; }
+        .role-user { background: #dbeafe; color: #1e40af; }
+        .role-tech { background: #d1fae5; color: #065f46; }
+        .role-technician { background: #d1fae5; color: #065f46; }
+        .role-manager { background: #d1fae5; color: #065f46; }
+        .btn-sm { padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer; font-size: 0.875rem; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-primary { background: var(--primary-color); color: white; }
+        .btn-outline { background: white; border: 1px solid #d1d5db; color: #374151; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-box { background: white; width: 100%; max-width: 520px; border-radius: 10px; padding: 1rem; }
+        .modal-box h3 { margin: 0 0 1rem 0; color: var(--secondary-color); }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        .form-grid .full { grid-column: 1 / -1; }
+        .form-group label { display: block; margin-bottom: 0.3rem; font-size: 0.85rem; color: #374151; }
+        .form-group input, .form-group select { width: 100%; padding: 0.55rem; border: 1px solid #d1d5db; border-radius: 6px; }
+        .modal-actions { margin-top: 1rem; display: flex; justify-content: flex-end; gap: 0.5rem; }
+        .sortable { cursor: pointer; user-select: none; }
+        .sortable:hover { background: #e5e7eb; }
+        .sortable::after { content: ' ⇅'; opacity: 0.3; margin-left: 5px; }
+        .sortable.asc::after { content: ' ↑'; opacity: 1; }
+        .sortable.desc::after { content: ' ↓'; opacity: 1; }
+        .admin-sidebar-toggle {
+            display: none; position: fixed; top: 1rem; left: 1rem; z-index: 1100;
+            background: var(--primary-color); color: white; border: none;
+            width: 44px; height: 44px; border-radius: 8px; font-size: 1.25rem;
+            cursor: pointer; align-items: center; justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .admin-sidebar-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 1040;
+        }
+        .admin-sidebar-overlay.active { display: block; }
+        @media (max-width: 768px) {
+            .admin-sidebar-toggle { display: flex; }
+            .admin-sidebar { transform: translateX(-100%); transition: transform 0.3s; z-index: 1050; }
+            .admin-sidebar.open { transform: translateX(0); }
+            .admin-main { margin-left: 0; padding: 1rem; padding-top: 4rem; overflow-x: hidden; }
+            .admin-header { padding: 1rem 1.25rem; }
+            .data-table { display: block; overflow-x: auto; white-space: nowrap; }
+            .data-table th, .data-table td { padding: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-dashboard">
+        <button class="admin-sidebar-toggle" id="adminSidebarToggle" aria-label="Toggle sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="admin-sidebar-overlay" id="adminSidebarOverlay"></div>
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-logo">
+                <i class="fa-solid fa-screwdriver-wrench" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                <h2>T.I.T.E Admin</h2>
+            </div>
+            <nav>
+                <ul class="admin-nav">
+                    <li><a href="admin-dashboard.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+                    <li><a href="admin-tickets.html"><i class="fa-solid fa-ticket"></i> Tickets</a></li>
+                    <li><a href="admin-services.html"><i class="fa-solid fa-cogs"></i> Services</a></li>
+                    <li><a href="admin-technicians.html"><i class="fa-solid fa-users"></i> Technicians</a></li>
+                    <li><a href="admin-availability.html"><i class="fa-solid fa-calendar"></i> Availability</a></li>
+                    <li><a href="admin-users.html" class="active"><i class="fa-solid fa-user"></i> Users</a></li>
+                    <li><a href="admin-messages.html"><i class="fa-solid fa-envelope"></i> Messages</a></li>
+                    <li><a href="admin-settings.html"><i class="fa-solid fa-cog"></i> Settings</a></li>
+                    <li class="nav-bottom"><a href="index.html"><i class="fa-solid fa-arrow-left"></i> Back to Main Page</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-header">
+                <div>
+                    <h1>User Management</h1>
+                    <p>Manage user accounts</p>
+                </div>
+                <div>
+                    <button class="btn-sm" onclick="createUser()" style="background: var(--primary-color); color: white;">
+                        <i class="fa-solid fa-user-plus"></i> Add User
+                    </button>
+                </div>
+            </div>
+
+            <div class="admin-content">
+                <div id="usersList">
+                    <p>Loading users...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="userModal" class="modal-overlay" onclick="closeUserModal(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h3 id="userModalTitle">Add User</h3>
+            <form onsubmit="submitUserForm(event)">
+                <input type="hidden" id="formMode" value="create">
+                <input type="hidden" id="targetEmail" value="">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="formName">Name</label>
+                        <input id="formName" type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="formEmail">Email</label>
+                        <input id="formEmail" type="email" required>
+                    </div>
+                    <div class="form-group" id="roleGroup">
+                        <label for="formRole">Role</label>
+                        <select id="formRole">
+                            <option value="user">user</option>
+                            <option value="admin">admin</option>
+                            <option value="technician">technician</option>
+                            <option value="manager">manager</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="formPhone">Phone</label>
+                        <input id="formPhone" type="text">
+                    </div>
+                    <div class="form-group full">
+                        <label for="formAddress">Address</label>
+                        <input id="formAddress" type="text">
+                    </div>
+                    <div class="form-group full">
+                        <label for="formPassword">Password</label>
+                        <input id="formPassword" type="password" minlength="8">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-sm btn-outline" onclick="closeUserModal()">Cancel</button>
+                    <button type="submit" class="btn-sm btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/database.js"></script>
+    <script>
+        let currentSort = { column: 'name', direction: 'asc' };
+
+        function openUserModal(mode, user = null) {
+            document.getElementById('formMode').value = mode;
+            document.getElementById('userModalTitle').textContent = mode === 'create' ? 'Add User' : 'Edit User';
+            document.getElementById('formPassword').required = mode === 'create';
+
+            if (mode === 'create') {
+                document.getElementById('targetEmail').value = '';
+                document.getElementById('formName').value = '';
+                document.getElementById('formEmail').value = '';
+                document.getElementById('formRole').value = 'user';
+                document.getElementById('formPhone').value = '';
+                document.getElementById('formAddress').value = '';
+                document.getElementById('formPassword').value = '';
+                document.getElementById('formEmail').disabled = false;
+                document.getElementById('roleGroup').style.display = 'none';
+            } else {
+                document.getElementById('targetEmail').value = user.email || '';
+                document.getElementById('formName').value = user.name || '';
+                document.getElementById('formEmail').value = user.email || '';
+                document.getElementById('formRole').value = (user.role || 'user').toLowerCase();
+                document.getElementById('formPhone').value = user.phone || '';
+                document.getElementById('formAddress').value = user.address || '';
+                document.getElementById('formPassword').value = '';
+                document.getElementById('formEmail').disabled = true;
+                document.getElementById('roleGroup').style.display = 'block';
+            }
+
+            document.getElementById('userModal').style.display = 'flex';
+        }
+
+        function closeUserModal(e) {
+            if (e && e.target && e.target.id !== 'userModal') return;
+            document.getElementById('userModal').style.display = 'none';
+        }
+
+        async function submitUserForm(e) {
+            e.preventDefault();
+            const mode = document.getElementById('formMode').value;
+            const payload = {
+                name: document.getElementById('formName').value.trim(),
+                email: document.getElementById('formEmail').value.trim(),
+                role: document.getElementById('formRole').value,
+                phone: document.getElementById('formPhone').value.trim(),
+                address: document.getElementById('formAddress').value.trim(),
+                password: document.getElementById('formPassword').value
+            };
+
+            try {
+                if (mode === 'create') {
+                    const result = await db.users.create(payload);
+                    if (!result.success) throw new Error(result.error || 'Failed to create user');
+                } else {
+                    const updates = {
+                        email: document.getElementById('targetEmail').value,
+                        name: payload.name,
+                        role: payload.role,
+                        phone: payload.phone,
+                        address: payload.address
+                    };
+                    if (payload.password.trim()) updates.password = payload.password.trim();
+                    const result = await db.users.update(updates);
+                    if (!result.success) throw new Error(result.error || 'Failed to update user');
+                }
+                closeUserModal();
+                loadUsers();
+            } catch (error) {
+                alert(`Error: ${error.message || 'Unknown error'}`);
+            }
+        }
+
+        async function loadUsers() {
+            const container = document.getElementById('usersList');
+            container.innerHTML = '<p>Loading users...</p>';
+            
+            try {
+                const result = await db.users.getAll();
+                if (result.success) {
+                    const users = Array.isArray(result.data) ? result.data : (result.data ? [result.data] : []);
+                    renderUsers(users);
+                } else {
+                    container.innerHTML = `<p>Error loading users: ${result.error || 'Unknown error'}</p>`;
+                }
+            } catch (error) {
+                container.innerHTML = `<p>Error loading users: ${error.message || 'Unknown error'}</p>`;
+            }
+        }
+
+        function sortUsers(users) {
+            const { column, direction } = currentSort;
+            const multiplier = direction === 'asc' ? 1 : -1;
+
+            return users.sort((a, b) => {
+                let valA, valB;
+
+                switch (column) {
+                    case 'name':
+                        valA = (a.name || '').toLowerCase();
+                        valB = (b.name || '').toLowerCase();
+                        break;
+                    case 'email':
+                        valA = (a.email || '').toLowerCase();
+                        valB = (b.email || '').toLowerCase();
+                        break;
+                    case 'role':
+                        valA = (a.role || '').toLowerCase();
+                        valB = (b.role || '').toLowerCase();
+                        break;
+                    case 'created':
+                        valA = new Date(a.created_at || 0);
+                        valB = new Date(b.created_at || 0);
+                        break;
+                    default:
+                        return 0;
+                }
+
+                if (valA < valB) return -1 * multiplier;
+                if (valA > valB) return 1 * multiplier;
+                return 0;
+            });
+        }
+
+        function handleSort(column) {
+            if (currentSort.column === column) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 'asc';
+            }
+            loadUsers();
+        }
+
+        function renderUsers(users) {
+            const container = document.getElementById('usersList');
+
+            if (users.length === 0) {
+                container.innerHTML = '<p>No users found.</p>';
+                return;
+            }
+
+            const sortedUsers = sortUsers(users);
+
+            const getSortClass = (col) => {
+                if (currentSort.column !== col) return 'sortable';
+                return `sortable ${currentSort.direction}`;
+            };
+
+            container.innerHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="${getSortClass('name')}" onclick="handleSort('name')">Name</th>
+                            <th class="${getSortClass('email')}" onclick="handleSort('email')">Email</th>
+                            <th class="${getSortClass('role')}" onclick="handleSort('role')">Role</th>
+                            <th class="${getSortClass('created')}" onclick="handleSort('created')">Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${sortedUsers.map(user => `
+                            <tr>
+                                <td>${user.name}</td>
+                                <td>${user.email}</td>
+                                <td><span class="role-badge role-${user.role}">${user.role}</span></td>
+                                <td>${new Date(user.created_at).toLocaleDateString()}</td>
+                                <td>
+                                    <button class="btn-sm" style="background:#3b82f6;color:white;margin-right:6px;" onclick="editUser('${user.email}')">Edit</button>
+                                    <button class="btn-sm btn-danger" onclick="deleteUser('${user.email}')">Delete</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        async function createUser() {
+            openUserModal('create');
+        }
+
+        async function editUser(email) {
+            try {
+                const current = await db.users.get(email);
+                if (!current.success || !current.data) throw new Error(current.error || 'User not found');
+                openUserModal('edit', current.data);
+            } catch (error) {
+                alert(`Error updating user: ${error.message || 'Unknown error'}`);
+            }
+        }
+
+        async function deleteUser(email) {
+            if (!confirm(`Delete user ${email}?`)) return;
+            try {
+                const result = await db.users.delete(email);
+                if (!result.success) throw new Error(result.error || 'Delete failed');
+                alert('User deleted successfully');
+                loadUsers();
+            } catch (error) {
+                alert(`Error deleting user: ${error.message || 'Unknown error'}`);
+            }
+        }
+
+        async function logout() {
+            try {
+                await db.auth.logout();
+                window.location.href = 'index.html';
+            } catch (error) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const result = await db.auth.checkSession();
+                if (!result.success || !db.auth.isAdmin()) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+            } catch (error) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            loadUsers();
+        });
+
+        window.deleteUser = deleteUser;
+        window.editUser = editUser;
+        window.createUser = createUser;
+        window.closeUserModal = closeUserModal;
+        window.submitUserForm = submitUserForm;
+        window.logout = logout;
+    </script>
+    <script>
+        // Sidebar toggle for mobile (admin pages)
+        (function() {
+            const sidebarToggle = document.getElementById('adminSidebarToggle');
+            const sidebarOverlay = document.getElementById('adminSidebarOverlay');
+            const sidebar = document.getElementById('adminSidebar');
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', () => {
+                    if (sidebar) sidebar.classList.toggle('open');
+                    if (sidebarOverlay) sidebarOverlay.classList.toggle('active');
+                });
+            }
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', () => {
+                    if (sidebar) sidebar.classList.remove('open');
+                    sidebarOverlay.classList.remove('active');
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
